@@ -161,6 +161,7 @@ const HomePage = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            pb: 3
           }}
         >
           <Typography variant={"h5"} fontWeight={600}>
@@ -184,7 +185,7 @@ const HomePage = () => {
             </NativeSelect>
           </FormControl>
         </Box>
-        <Grid container spacing={3} p={3}>
+        <Grid container spacing={3} p={3} sx={{overflowY: 'auto', height: 650}}>
         {dataProduct.map((data, index) => {
           if (data.count > 0) {
             return (

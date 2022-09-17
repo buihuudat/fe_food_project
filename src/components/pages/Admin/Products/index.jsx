@@ -119,7 +119,7 @@ const Products = () => {
   useEffect(() => {
     const type = menu[tab].type
     setDataProduct(dataFilter(type))
-  }, [products])
+  }, [products, option])
   const handleClick = (e) => {
     const type = menu[e].type
     setDataProduct(dataFilter(type))
@@ -181,6 +181,7 @@ const Products = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            pb: 3
           }}
         >
           <Typography variant={"h5"} fontWeight={600}>
@@ -204,7 +205,7 @@ const Products = () => {
             </NativeSelect>
           </FormControl>
         </Box>
-        <Grid container spacing={3} p={3}>
+        <Grid container spacing={3} p={3} sx={{overflowY: 'auto', height: 650}}>
           {dataProduct.map((data, index) => (
             <Grid key={index} item>
               <FoodCard props={data} />
