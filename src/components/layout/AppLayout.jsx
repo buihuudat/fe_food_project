@@ -28,8 +28,8 @@ const AppLayout = () => {
   const path = pathname.split('/')[1]
 
   useEffect(() => {
-    dispatch(setLoading(true))
     const getUser = async () => {
+      dispatch(setLoading(true))
       const auth = await authUtils.isAuthenticated() 
       const products = await productApi.getAll()
       const orders = await userOrderApi.get(auth)

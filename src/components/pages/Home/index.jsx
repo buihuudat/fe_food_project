@@ -185,7 +185,7 @@ const HomePage = () => {
             </NativeSelect>
           </FormControl>
         </Box>
-        <Grid container spacing={3} p={3} sx={{overflowY: 'auto', height: 650}}>
+        <Grid container spacing={3} p={3} sx={{overflowY: 'auto', height: 620}}>
         {dataProduct.map((data, index) => {
           if (data.count > 0) {
             return (
