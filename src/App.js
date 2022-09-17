@@ -14,9 +14,14 @@ import Admin from './components/pages/Admin';
 import Products from './components/pages/Admin/Products';
 import Orders from './components/pages/Admin/Orders';
 import Users from './components/pages/Admin/Users';
+import Vouchers from './components/pages/Admin/Voucher';
+import Profile from './components/pages/Profile';
+import Bill from './components/pages/Bill';
+import Bought from './components/pages/Bought';
+import Feedback from './components/pages/Admin/Feedback';
 
 const App = () => {
-  const darkmode = true
+  const darkmode = 0
   const theme = createTheme({
     palette: {
       mode: darkmode ? 'dark' : 'light'
@@ -28,15 +33,20 @@ const App = () => {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={<AuthLayout />} />
           <Route path='/' element={<AppLayout />}>
             <Route path='/' index element={<Home />} />
+            <Route path='/bills' index element={<Bill />} />
+            <Route path='/bought' index element={<Bought />} />
+            <Route path='/profile' element={<Profile />} />
           </Route>
-          <Route path='/' element={<AuthLayout />} />
           <Route path='/' element={<AdminLayout />}>
-            <Route path='/admin' element={<Admin />} />
+            <Route path='/admin' index element={<Admin />} />
             <Route path='/admin/products' element={<Products />} />
             <Route path='/admin/orders' element={<Orders />} />
+            <Route path='/admin/vouchers' element={<Vouchers />} />
             <Route path='/admin/users' element={<Users />} />
+            <Route path='/admin/feedback' element={<Feedback />} />
           </Route>
         </Routes>
       </BrowserRouter>

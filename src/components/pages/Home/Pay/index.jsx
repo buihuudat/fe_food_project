@@ -1,66 +1,78 @@
 import * as React from "react";
-import _ from 'lodash'
+import _ from "lodash";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import AutoFixHighRoundedIcon from "@mui/icons-material/AutoFixHighRounded";
-import { Button, Chip, IconButton, stepContentClasses } from "@mui/material";
+import {
+  Button,
+  Chip,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import HorizontalRuleOutlinedIcon from "@mui/icons-material/HorizontalRuleOutlined";
 import { useDispatch, useSelector } from "react-redux";
-import currentFormat from "../../../handler/currentFormat";
-import { setCart } from "../../../redux/reducers/cartReducer";
+import currentFormat from "../../../../handler/currentFormat";
+import { setCart } from "../../../../redux/reducers/cartReducer";
 import { useEffect } from "react";
+import { setProducts } from "../../../../redux/reducers/productReducer";
+import { useMemo } from "react";
+import { setPayModal, setSigninModal } from "../../../../redux/reducers/modalReducer";
 
-const CountUp = ({props}) => {
-  const cartProduct = useSelector(state => state.cart.data)
-  const dataProduct = useSelector(state => state.products.data)
+const CountUp = ({ props }) => {
+  const cartProduct = useSelector((state) => state.cart.data);
+  const dataProduct = useSelector((state) => state.products.data);
 
-  const dispatch = useDispatch()
-  let cartItems = [...cartProduct] // cartItems of cart products
-  let productItems = [...dataProduct] // dataProduct of cart products
+  const dispatch = useDispatch();
+  let cartItems = useMemo(() => [...cartProduct], [cartProduct]); // cartItems of cart products
+  let productItems = useMemo(() => [...dataProduct], [dataProduct]); // dataProduct of cart products
 
   const updateCart = (up) => {
-    cartProduct.map((v, i) => {
+    cartProduct.forEach((v, i) => {
       if (v._id === props._id) {
         cartItems[i] = {
           ...v,
-          count:  up ? v.count - 1 : v.count + 1,
-          countCartUser: up ? props.countCartUser + 1 : props.countCartUser - 1
-        }
+          count: up ? v.count - 1 : v.count + 1,
+          countCartUser: up ? props.countCartUser + 1 : props.countCartUser - 1,
+        };
       }
-    })
-    dispatch(setCart([...cartItems]))
+    });
+    dispatch(setCart([...cartItems]));
 
-    dataProduct.map((v, i) => {
+    dataProduct.forEach ((v, i) => {
       if (v._id === props._id) {
         productItems[i] = {
           ...v,
-          count:  up ? v.count - 1 : v.count + 1,
-          countCartUser: up ? props.countCartUser + 1 : props.countCartUser - 1
-        }
+          count: up ? v.count - 1 : v.count + 1,
+          countCartUser: up ? props.countCartUser + 1 : props.countCartUser - 1,
+        };
       }
-    })
-  }
-  
+    });
+    dispatch(setProducts([...productItems]));
+  };
+
   const handleUp = (e) => {
-    updateCart(true)
-  }
+    updateCart(true);
+  };
   const handleDown = (e) => {
-    updateCart(false)
-  }
+    updateCart(false);
+  };
 
   useEffect(() => {
-    // hide modal pay when countCCartUser = 0    
+    // hide modal pay when countCartUser = 0
     const removeCart = () => {
-      const index = _.findIndex(cartProduct, e => { return  e.countCartUser == 0 })
-      index !== -1 && cartItems.splice(index, 1)
-      dispatch(setCart([...cartItems]))
-    }
-    removeCart()
-  }, [props.countCartUser])
+      const index = _.findIndex(cartProduct, (e) => {
+        return parseInt(e.countCartUser) === 0;
+      });
+      index !== -1 && cartItems.splice(index, 1);
+      dispatch(setCart([...cartItems]));
+      dispatch(setProducts([...productItems]));
+    };
+    removeCart();
+  }, [props.countCartUser]);
 
   return (
     <Box
@@ -74,14 +86,14 @@ const CountUp = ({props}) => {
         <HorizontalRuleOutlinedIcon fontSize="small" />
       </IconButton>
       <Typography fontWeight={600}>{props.countCartUser}</Typography>
-      <IconButton disabled={props.count===0} onClick={() => handleUp(props)}>
+      <IconButton disabled={props.count === 0} onClick={() => handleUp(props)}>
         <AddOutlinedIcon fontSize="small" />
       </IconButton>
     </Box>
   );
 };
 
-const Product = ({props}) => {
+const Product = ({ props }) => {
   return (
     <Box
       sx={{
@@ -111,12 +123,15 @@ const Product = ({props}) => {
         <Typography fontWeight={600} component="h6">
           {props.name}
         </Typography>
-        <Typography variant="body2">{currentFormat(props.price)}</Typography>
+        <Typography variant="body2" sx={{textDecoration: 'line-through'}} color='orange'>{currentFormat(props.price)}</Typography>
       </Box>
       <Box>
         <CountUp props={props} />
-        <Typography variant="h6" fontWeight={600} align="center">
-          {currentFormat((props.price - (props.price * props.discount / 100)) * props.countCartUser)}
+        <Typography variant="h6" fontWeight={600} align="center" color='orange'>
+          {currentFormat(
+            (props.price - (props.price * props.discount) / 100) *
+              props.countCartUser
+          )}
         </Typography>
       </Box>
     </Box>
@@ -124,14 +139,35 @@ const Product = ({props}) => {
 };
 
 export default function Pay({ drawerWidth }) {
-  const products = useSelector(state => state.cart.data)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user.value)
+  const products = useSelector((state) => state.cart.data);
+  const cartProduct = useSelector((state) => state.cart.data);
+  const login = useSelector(state => state.handler.login)
+
+  let cartItems = useMemo(() => [...cartProduct], [cartProduct]); // cartItems of cart products
+
   const amount = () => {
-    const result = _.sumBy(products, e => {
-      return (e.price - (e.price * e.discount / 100)) * e.countCartUser
-    })
-    return result
+    const result = _.sumBy(products, (e) => {
+      return (e.price - (e.price * e.discount) / 100) * e.countCartUser;
+    });
+    return result;
+  };
+
+  const handleOrder = () => {
+    const data = {
+      products: cartItems,
+      user: user,
+      amount: amount(),
+    }
+
+    if (!login) {
+      dispatch(setSigninModal(true))
+    } else {
+      dispatch(setPayModal({type: true, data: data}))
+    }
   }
-  
+
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -162,15 +198,14 @@ export default function Pay({ drawerWidth }) {
             <AutoFixHighRoundedIcon />
           </IconButton>
         </Box>
-        <List sx={{overflowY: 'auto'}}>
-          {products && products.map((data, index) => (
-            <Product key={index} props={data} />
-          ))}
+        <List sx={{ overflowY: "auto" }}>
+          {products &&
+            products.map((data, index) => <Product key={index} props={data} />)}
         </List>
         <Box
           sx={{
             mt: "auto",
-            height: "300px",
+            height: "200px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -191,22 +226,9 @@ export default function Pay({ drawerWidth }) {
               alignItems: "center",
             }}
           >
-            <Typography variant="body2">Tổng thanh toán</Typography>
+            <Typography variant="body2">Tổng tiền hàng</Typography>
             <Typography variant="h6" fontWeight={600}>
               {currentFormat(amount())}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="body2">Giảm giá (50%)</Typography>
-            <Typography variant="h6" fontWeight={600}>
-              13.000
             </Typography>
           </Box>
           <Button
@@ -214,8 +236,10 @@ export default function Pay({ drawerWidth }) {
             size="large"
             variant="contained"
             color="warning"
+            fontWeight={600}
+            onClick={handleOrder}
           >
-            Thanh Toán 13,000 vnd
+            ĐẶT HÀNG
           </Button>
         </Box>
       </Drawer>

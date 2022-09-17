@@ -9,6 +9,7 @@ import Backdrop from '@mui/material/Backdrop';
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { setLogin } from "../../../redux/reducers/handlerReducer";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -26,6 +27,7 @@ const style = {
 const Profile = () => {
   const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.user.value);
+  const navigate = useNavigate()
 
   const dispatch = useDispatch();
 
@@ -34,6 +36,7 @@ const Profile = () => {
     localStorage.removeItem("token");
     dispatch(setLogin(false));
     setOpen(false);
+    navigate('/')
   };
 
   return (
@@ -59,7 +62,7 @@ const Profile = () => {
             {user.fullname}
           </Typography>
           <Typography variant="body2">{user.permission === 0 ? 'Quản trị viên' : 'Người dùng'}</Typography>
-          <Button variant="outlined">Profile</Button>
+          <Button href={"/profile"}  variant="outlined">Profile</Button>
         </Paper>
         <Button
           fullWidth

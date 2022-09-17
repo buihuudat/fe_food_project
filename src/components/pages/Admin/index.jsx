@@ -7,7 +7,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SellIcon from '@mui/icons-material/Sell';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 
 const dataInfo = [
   {

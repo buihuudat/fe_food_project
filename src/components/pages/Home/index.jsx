@@ -3,8 +3,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
-  Container,
   Grid,
   Typography,
 } from "@mui/material";
@@ -16,7 +14,6 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 
-import LocalFireDepartmentOutlinedIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import RiceBowlOutlinedIcon from "@mui/icons-material/RiceBowlOutlined";
 import RamenDiningOutlinedIcon from "@mui/icons-material/RamenDiningOutlined";
 import LunchDiningOutlinedIcon from "@mui/icons-material/LunchDiningOutlined";
@@ -28,15 +25,16 @@ import FoodCard from "../../common/FoodCard";
 import Pay from "./Pay";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import PayModal from "./Pay/PayModal";
 
 const menu = [
-  {
-    icon: (
-      <LocalFireDepartmentOutlinedIcon sx={{ width: "60px", height: "60px" }} />
-    ),
-    title: "Hot",
-    type: 'hot',
-  },
+  // {
+  //   icon: (
+  //     <LocalFireDepartmentOutlinedIcon sx={{ width: "60px", height: "60px" }} />
+  //   ),
+  //   title: "Hot",
+  //   type: 'hot',
+  // },
   {
     icon: <RiceBowlOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Cơm",
@@ -77,24 +75,36 @@ const menu = [
 ];
 
 const HomePage = () => {
+  const [type, setType] = useState('rice')
+  const [option, setOption] = useState(0)
   const cart = useSelector(state => state.cart.data)
   const products = useSelector(state => state.products.data)
   const drawerWidth = cart.length > 0 && 320
 
   // get data for pay
   const dataFilter = (type) => {
-    const data = _.filter(products, {
+    const sort = ['createdAt', 'price', 'price'] 
+    const reverse = ['desc', 'asc', 'desc']
+    let data = _.filter(products, {
       'type': type
     })
+    data = _.orderBy(products, [`${sort[option]}`], [`${reverse[option]}`] )
+    console.log(data);
     return data
   }
 
   const [tab, setTab] = useState(0);
   const [dataProduct, setDataProduct] = useState(dataFilter(menu[0].type))
+  
+  useEffect(() => {
+    setDataProduct(dataFilter(type))
+  }, [products, option])
+
   const handleClick = (e) => {
     const type = menu[e].type
     setDataProduct(dataFilter(type))
     setTab(e);
+    setType(type)
   };
   
   return (
@@ -162,27 +172,33 @@ const HomePage = () => {
               Sắp xếp
             </InputLabel>
             <NativeSelect
-              defaultValue={10}
+              defaultValue={option}
               inputProps={{
                 name: "priceUp",
                 id: "uncontrolled-native",
               }}
+              onChange={(e) => setOption(e.target.value)}
             >
-              <option value={10}>Mới nhất</option>
-              <option value={20}>Giá tăng dần</option>
-              <option value={30}>Giá giảm dần</option>
+              <option value={0}>Mới nhất</option>
+              <option value={1}>Giá tăng dần</option>
+              <option value={2}>Giá giảm dần</option>
             </NativeSelect>
           </FormControl>
         </Box>
         <Grid container spacing={3} p={3}>
-        {dataProduct.map((data, index) => (
-            <Grid key={index} item>
-              <FoodCard props={data} />
-            </Grid>
-          ))}
+        {dataProduct.map((data, index) => {
+          if (data.count > 0) {
+            return (
+              <Grid key={index} item>
+                <FoodCard props={data} />
+              </Grid>
+            )
+          }
+        })}
         </Grid>
       </Box>
       <Pay drawerWidth={drawerWidth} />
+      <PayModal />
     </Box>
   );
 };

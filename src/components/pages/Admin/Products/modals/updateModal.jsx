@@ -109,13 +109,14 @@ export default function UpdateModal() {
     e.preventDefault()
     const formData = new FormData(e.target)
     const data = {
-      id: update.data._id, 
+      _id: update.data._id, 
       type: menu[formData.get('type')].type,
       name: formData.get('product_name'),
       description: formData.get('product_desc'),
       price: formData.get('product_price'),
       discount: formData.get('discount') || 0,
       image: image || update.data.image,
+      count: formData.get('count'),
     }
     let err = false
     if (data.name === '') {
@@ -221,7 +222,15 @@ export default function UpdateModal() {
             margin="normal"
             label="Discount %"
             defaultValue={update.data.discount}
-            name="product_discount"
+            name="discount"
+            type={"number"}
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Count"
+            defaultValue={update.data.count}
+            name="count"
             type={"number"}
           />
           <LoadingButton

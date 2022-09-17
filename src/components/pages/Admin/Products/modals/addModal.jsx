@@ -17,7 +17,6 @@ import Toast from '../../../../common/Toast'
 import productApi from '../../../../../api/productApi'
 import { useEffect } from "react";
 import { setProducts } from "../../../../../redux/reducers/productReducer";
-import { createReducer } from "@reduxjs/toolkit";
 
 const style = {
   position: "absolute",
@@ -110,7 +109,6 @@ export default function AddModal() {
       count: formData.get('count'),
       image: image,
     }
-    console.log(data);
     let err = false
     if (data.name === '') {
       err = true

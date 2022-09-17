@@ -23,6 +23,7 @@ import Toast from "./Toast";
 import { setProducts } from "../../redux/reducers/productReducer";
 import { setCart } from "../../redux/reducers/cartReducer";
 import LoadingButton from "@mui/lab/LoadingButton";
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 const style = {
   position: "absolute",
@@ -37,12 +38,11 @@ const style = {
 };
 
 const FoodCard = ({ props }) => {
-  const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
   const { permission } = useSelector((state) => state.user.value);
   const addCart = useSelector((state) => state.cart.data);
   const dataProduct = useSelector(state => state.products.data)
-
   const handleDelete = async (e) => {
     try {
       const product = await productApi.delete(e);
@@ -101,15 +101,15 @@ const FoodCard = ({ props }) => {
       );
   };
 
-  const index = _.findIndex(dataProduct, e => {
-    return e.count == 0
-  })
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <Box>
       <Card sx={{ width: 180 }}>
         <CardContent>
           <CardMedia
-            sx={{ width: "100%", height: "100%" }}
+            sx={{ width: "100%", height: "100px", objectFit: 'fill' }}
             component="img"
             image={props.image}
           />
@@ -117,7 +117,7 @@ const FoodCard = ({ props }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: 200,
+              height: 120,
               p: 0,
               pt: 3,
             }}
@@ -152,9 +152,14 @@ const FoodCard = ({ props }) => {
                 props.price - (props.price * props.discount) / 100
               )}
             </Typography>
-            <IconButton disabled={dataProduct[index]?.count === 0 && dataProduct[index]._id === props._id } onClick={() => handleAdd(props)}>
-              <AddShoppingCartIcon color="success" />
-            </IconButton>
+            {props.countCartUser > 0 ? 
+            <IconButton disabled >
+              <PlaylistAddCheckIcon color="success" />
+            </IconButton> : 
+              <IconButton onClick={() => handleAdd(props)}>
+                <AddShoppingCartIcon color="primary" />
+              </IconButton>
+            }
           </Box>
           {permission === 0 && (
             <Typography variant="body2" fontWeight={600} color="primary">
@@ -198,7 +203,7 @@ const FoodCard = ({ props }) => {
               gap: 2,
             }}
           >
-            <Button color="primary" fullWidth variant="outlined">
+            <Button onClick={handleClose} color="primary" fullWidth variant="outlined">
               Hủy
             </Button>
             <LoadingButton
