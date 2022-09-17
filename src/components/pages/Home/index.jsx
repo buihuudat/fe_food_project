@@ -89,7 +89,6 @@ const HomePage = () => {
       'type': type
     })
     data = _.orderBy(products, [`${sort[option]}`], [`${reverse[option]}`] )
-    console.log(data);
     return data
   }
 
