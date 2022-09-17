@@ -13,7 +13,6 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 
-import LocalFireDepartmentOutlinedIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import RiceBowlOutlinedIcon from "@mui/icons-material/RiceBowlOutlined";
 import RamenDiningOutlinedIcon from "@mui/icons-material/RamenDiningOutlined";
 import LunchDiningOutlinedIcon from "@mui/icons-material/LunchDiningOutlined";
@@ -101,12 +100,16 @@ const AddToggle = () => {
 };
 
 const Products = () => {
+  const [option, setOption] = useState(0)
   const products = useSelector(state => state.products.data)
 
   const dataFilter = (type) => {
+    const sort = ['createdAt', 'price', 'price'] 
+    const reverse = ['desc', 'asc', 'desc']
     const data = _.filter(products, {
       'type': type
     })
+    data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`] )
     return data
   }
 
@@ -188,15 +191,16 @@ const Products = () => {
               Sắp xếp
             </InputLabel>
             <NativeSelect
-              defaultValue={10}
+              defaultValue={option}
+              onChange={(e) => setOption(e.target.value)}
               inputProps={{
                 name: "priceUp",
                 id: "uncontrolled-native",
               }}
             >
-              <option value={10}>Mới nhất</option>
-              <option value={20}>Giá tăng dần</option>
-              <option value={30}>Giá giảm dần</option>
+              <option value={0}>Mới nhất</option>
+              <option value={1}>Giá tăng dần</option>
+              <option value={2}>Giá giảm dần</option>
             </NativeSelect>
           </FormControl>
         </Box>

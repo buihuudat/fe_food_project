@@ -88,7 +88,7 @@ const HomePage = () => {
     let data = _.filter(products, {
       'type': type
     })
-    data = _.orderBy(products, [`${sort[option]}`], [`${reverse[option]}`] )
+    data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`] )
     return data
   }
 
