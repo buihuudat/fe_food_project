@@ -25,7 +25,7 @@ const Bill = () => {
   return (
     <Box>
       <Grid container spacing={3} p={3}>
-        {loading && products.map((product, index) => {
+        {loading && products?.map((product, index) => {
           if (!product.status) {
             return (
               <Grid key={index} item>
