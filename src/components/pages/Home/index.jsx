@@ -70,7 +70,7 @@ const menu = [
   {
     icon: <KebabDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Ăn vặt",
-    type: 'fast_food'
+    type: 'an_vat'
   },
 ];
 

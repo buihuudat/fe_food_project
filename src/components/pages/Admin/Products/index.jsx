@@ -33,13 +33,13 @@ import UpdateModal from "./modals/updateModal";
 import { useEffect } from "react";
 
 const menu = [
-  {
-    icon: (
-      <LocalFireDepartmentOutlinedIcon sx={{ width: "60px", height: "60px" }} />
-    ),
-    title: "Hot",
-    type: 'hot',
-  },
+  // {
+  //   icon: (
+  //     <LocalFireDepartmentOutlinedIcon sx={{ width: "60px", height: "60px" }} />
+  //   ),
+  //   title: "Hot",
+  //   type: 'hot',
+  // },
   {
     icon: <RiceBowlOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Cơm",
@@ -75,7 +75,7 @@ const menu = [
   {
     icon: <KebabDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Ăn vặt",
-    type: 'fast_food'
+    type: 'an_vat'
   },
 ];
 
