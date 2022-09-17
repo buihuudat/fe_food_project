@@ -117,7 +117,7 @@ const FoodCard = ({ props }) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: 120,
+              height: 150,
               p: 0,
               pt: 3,
             }}
