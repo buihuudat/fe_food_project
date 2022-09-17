@@ -106,7 +106,7 @@ const Products = () => {
   const dataFilter = (type) => {
     const sort = ['createdAt', 'price', 'price'] 
     const reverse = ['desc', 'asc', 'desc']
-    const data = _.filter(products, {
+    let data = _.filter(products, {
       'type': type
     })
     data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`] )
