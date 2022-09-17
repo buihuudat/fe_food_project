@@ -75,7 +75,7 @@ const menu = [
   {
     icon: <KebabDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Ăn vặt",
-    type: 'an_vat'
+    type: 'junk_food'
   },
 ];
 
