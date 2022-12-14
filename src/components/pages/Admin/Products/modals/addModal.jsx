@@ -5,18 +5,19 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select'
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { useState } from "react";
 
-import FileBase64 from 'react-file-base64'; 
+import FileBase64 from "react-file-base64";
 import { setAddModal } from "../../../../../redux/reducers/modalReducer";
-import Toast from '../../../../common/Toast'
-import productApi from '../../../../../api/productApi'
+import Toast from "../../../../common/Toast";
+import productApi from "../../../../../api/productApi";
 import { useEffect } from "react";
 import { setProducts } from "../../../../../redux/reducers/productReducer";
+import imageUpload from "../../../../../handler/ImageUpload";
 
 const style = {
   position: "absolute",
@@ -33,116 +34,116 @@ const style = {
 const menu = [
   {
     title: "Cơm",
-    type: 'rice'
+    type: "rice",
   },
   {
     title: "Mì",
-    type: 'noodle'
+    type: "noodle",
   },
   {
     title: "Đồ ăn nhanh",
-    type: 'fast_food'
+    type: "fast_food",
   },
   {
     title: "Coffee",
-    type: 'coffee'
+    type: "coffee",
   },
   {
     title: "Trà sữa",
-    type: 'milk_tea'
+    type: "milk_tea",
   },
   {
     title: "Kem",
-    type: 'cream'
+    type: "cream",
   },
   {
     title: "Ăn vặt",
-    type: 'junk_food'
+    type: "junk_food",
   },
 ];
 
 export default function AddModal() {
-  const [value, setValue] = useState(0)
-  const [image, setImage] = useState('')
-  const [nameErrText, setNameErrText] = useState('')
-  const [descErrText, setDescErrText] = useState('')
-  const [priceErrText, setPriceErrText] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [value, setValue] = useState(0);
+  const [image, setImage] = useState("");
+  const [nameErrText, setNameErrText] = useState("");
+  const [descErrText, setDescErrText] = useState("");
+  const [priceErrText, setPriceErrText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const open = useSelector((state) => state.modal.addModal);
 
   useEffect(() => {
     const getAllProduct = async () => {
-      const products = await productApi.getAll()
-      dispatch(setProducts(products))
-    }
-    getAllProduct()
-  }, [dispatch, loading])
+      const products = await productApi.getAll();
+      dispatch(setProducts(products));
+    };
+    getAllProduct();
+  }, [dispatch, loading]);
 
   const handleClose = () => {
     dispatch(setAddModal(false));
-    setLoading(false)
-    setValue(0)
-    setImage('')
-    setNameErrText('')
-    setDescErrText('')
-    setPriceErrText('')
+    setLoading(false);
+    setValue(0);
+    setImage("");
+    setNameErrText("");
+    setDescErrText("");
+    setPriceErrText("");
   };
 
   const handleChange = (e) => {
-    setValue(e.target.value)
-  }
+    setValue(e.target.value);
+  };
 
-  const handleChangeAvatar = (e) => {
-    setImage(e.base64)
-  }
+  const handleChangeAvatar = async (e) => {
+    setImage(await imageUpload(e.base64));
+  };
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
+    e.preventDefault();
+    const formData = new FormData(e.target);
     const data = {
-      type: menu[formData.get('type')].type,
-      name: formData.get('product_name'),
-      description: formData.get('product_desc'),
-      price: formData.get('product_price'),
-      discount: formData.get('discount'),
-      count: formData.get('count'),
+      type: menu[formData.get("type")].type,
+      name: formData.get("product_name"),
+      description: formData.get("product_desc"),
+      price: formData.get("product_price"),
+      discount: formData.get("discount"),
+      count: formData.get("count"),
       image: image,
+    };
+    let err = false;
+    if (data.name === "") {
+      err = true;
+      setNameErrText("Vui lòng nhập tên sản phẩm");
     }
-    let err = false
-    if (data.name === '') {
-      err = true
-      setNameErrText('Vui lòng nhập tên sản phẩm')
+    if (data.description === "") {
+      err = true;
+      setDescErrText("Vui lòng nhập nội dung sản phẩm");
     }
-    if (data.description === '') {
-      err = true
-      setDescErrText('Vui lòng nhập nội dung sản phẩm')
+    if (data.price === "") {
+      err = true;
+      setPriceErrText("Vui lòng nhập giá sản phẩm");
     }
-    if (data.price === '') {
-      err = true
-      setPriceErrText('Vui lòng nhập giá sản phẩm')
-    }
-    if (data.image === '') {
-      err = true
-      alert('Hãy thêm ảnh cho sản phẩm')
+    if (data.image === "") {
+      err = true;
+      alert("Hãy thêm ảnh cho sản phẩm");
     }
 
-    if (err) return
-    setLoading(true)
-    setValue(0)
-    setImage('')
-    setNameErrText('')
-    setDescErrText('')
-    setPriceErrText('')
+    if (err) return;
+    setLoading(true);
+    setValue(0);
+    setImage("");
+    setNameErrText("");
+    setDescErrText("");
+    setPriceErrText("");
 
     try {
-      const createProduct = await productApi.create(data)
-      Toast('success', `Đã thêm ${createProduct.name}`)
-      setLoading(false)
-      dispatch(setAddModal(false))
+      const createProduct = await productApi.create(data);
+      Toast("success", `Đã thêm ${createProduct.name}`);
+      setLoading(false);
+      dispatch(setAddModal(false));
     } catch (error) {
-      setLoading(false)
-      Toast('error', 'Thêm thất bại!!!...uhmm maybe đã có lỗi nào đó sảy ra')
+      setLoading(false);
+      Toast("error", "Thêm thất bại!!!...uhmm maybe đã có lỗi nào đó sảy ra");
     }
   };
 
@@ -164,29 +165,39 @@ export default function AddModal() {
             <Select
               value={value}
               label="Loại sản phẩm"
-              name='type'
+              name="type"
               onChange={handleChange}
             >
-              {menu.map(({title}, index) => (
-                <MenuItem key={index} value={index}>{title}</MenuItem>
+              {menu.map(({ title }, index) => (
+                <MenuItem key={index} value={index}>
+                  {title}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <Button fullWidth sx={{mt:3, display: 'flex', flexDirection: 'column'}}>
-            <img src={image}
-              alt={''}
+          <Button
+            fullWidth
+            sx={{ mt: 3, display: "flex", flexDirection: "column" }}
+          >
+            <img
+              src={image}
+              alt={""}
               style={{
-                width: '200px'
+                width: "200px",
               }}
             />
-            <FileBase64 type={'file'} multiple={false } onDone={(e) => handleChangeAvatar(e)} />
+            <FileBase64
+              type={"file"}
+              multiple={false}
+              onDone={(e) => handleChangeAvatar(e)}
+            />
           </Button>
           <TextField
             fullWidth
             margin="normal"
             label="Tên sản phẩm"
             name="product_name"
-            error={nameErrText!==''}
+            error={nameErrText !== ""}
             helperText={nameErrText}
           />
           <TextField
@@ -196,7 +207,7 @@ export default function AddModal() {
             margin="normal"
             label="Mô tả"
             name="product_desc"
-            error={descErrText!==''}
+            error={descErrText !== ""}
             helperText={descErrText}
           />
           <TextField
@@ -205,7 +216,7 @@ export default function AddModal() {
             label="Giá"
             name="product_price"
             type={"number"}
-            error={priceErrText!==''}
+            error={priceErrText !== ""}
             helperText={priceErrText}
           />
           <TextField
@@ -226,12 +237,14 @@ export default function AddModal() {
           />
           <LoadingButton
             fullWidth
-            color='success'
+            color="success"
             variant="outlined"
-            sx={{mt: 2}}
+            sx={{ mt: 2 }}
             loading={loading}
-            type={'submit'}
-          >Thêm</LoadingButton>
+            type={"submit"}
+          >
+            Thêm
+          </LoadingButton>
         </Box>
       </Modal>
     </div>
