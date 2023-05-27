@@ -114,6 +114,8 @@ const HomePage = () => {
     setType(type);
   };
 
+  console.log(dataProduct);
+
   return (
     <Box sx={{ pr: `${drawerWidth}px` }}>
       <Box sx={{ p: 3 }}>
@@ -199,7 +201,7 @@ const HomePage = () => {
           p={3}
           sx={{ overflowY: "auto", height: 620 }}
         >
-          {dataProduct.forEach((data, index) => {
+          {dataProduct.map((data, index) => {
             if (data.count > 0) {
               return (
                 <Grid key={index} item>
