@@ -16,7 +16,6 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlined";
 import { Button, Chip, ListItemSecondaryAction } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
@@ -182,9 +181,11 @@ export default function Navbar() {
         <List>
           {otherHeaders.map((data, index) => (
             <ListItem key={index}>
-              <ListItemButton onClick={
-                login ? data.handler : () => dispatch(setSigninModal(true))
-              }>
+              <ListItemButton
+                onClick={
+                  login ? data.handler : () => dispatch(setSigninModal(true))
+                }
+              >
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText>{data.text}</ListItemText>
                 {login && data.noti !== 0 && (

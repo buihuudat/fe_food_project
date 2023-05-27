@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import _ from 'lodash'
+import _ from "lodash";
 
 import {
   Box,
@@ -26,11 +26,11 @@ import AddIcon from "@mui/icons-material/Add";
 
 import FoodCard from "../../../common/FoodCard";
 import AddModal from "./modals/addModal";
-import { useDispatch, useSelector } from 'react-redux'
-import { setAddModal } from '../../../../redux/reducers/modalReducer'
+import { useDispatch, useSelector } from "react-redux";
+import { setAddModal } from "../../../../redux/reducers/modalReducer";
 import UpdateModal from "./modals/updateModal";
 import { useEffect } from "react";
-
+import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 const menu = [
   // {
   //   icon: (
@@ -40,48 +40,53 @@ const menu = [
   //   type: 'hot',
   // },
   {
+    icon: <DensitySmallIcon sx={{ width: "60px", height: "60px" }} />,
+    title: "Tất cả",
+    type: "all",
+  },
+  {
     icon: <RiceBowlOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Cơm",
-    type: 'rice'
+    type: "rice",
   },
   {
     icon: <RamenDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Mì",
-    type: 'noodle'
+    type: "noodle",
   },
   {
     icon: <LunchDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Đồ ăn nhanh",
-    type: 'fast_food'
+    type: "fast_food",
   },
   {
     icon: <LocalCafeOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Coffee",
-    type: 'coffee'
+    type: "coffee",
   },
   {
     icon: (
       <EmojiFoodBeverageOutlinedIcon sx={{ width: "60px", height: "60px" }} />
     ),
     title: "Trà sữa",
-    type: 'milk_tea'
+    type: "milk_tea",
   },
   {
     icon: <IcecreamOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Kem",
-    type: 'cream'
+    type: "cream",
   },
   {
     icon: <KebabDiningOutlinedIcon sx={{ width: "60px", height: "60px" }} />,
     title: "Ăn vặt",
-    type: 'junk_food'
+    type: "junk_food",
   },
 ];
 
 const AddToggle = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(setAddModal(true))
+    dispatch(setAddModal(true));
   };
   return (
     <Box
@@ -100,29 +105,29 @@ const AddToggle = () => {
 };
 
 const Products = () => {
-  const [option, setOption] = useState(0)
-  const products = useSelector(state => state.products.data)
+  const [option, setOption] = useState(0);
+  const products = useSelector((state) => state.products.data);
 
   const dataFilter = (type) => {
-    const sort = ['createdAt', 'price', 'price'] 
-    const reverse = ['desc', 'asc', 'desc']
+    const sort = ["createdAt", "price", "price"];
+    const reverse = ["desc", "asc", "desc"];
     let data = _.filter(products, {
-      'type': type
-    })
-    data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`] )
-    return data
-  }
+      type: type,
+    });
+    data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`]);
+    return data;
+  };
 
   const [tab, setTab] = useState(0);
-  const [dataProduct, setDataProduct] = useState(dataFilter(menu[0].type))
+  const [dataProduct, setDataProduct] = useState(dataFilter(menu[0].type));
 
   useEffect(() => {
-    const type = menu[tab].type
-    setDataProduct(dataFilter(type))
-  }, [products, option])
+    const type = menu[tab].type;
+    setDataProduct(dataFilter(type));
+  }, [products, option]);
   const handleClick = (e) => {
-    const type = menu[e].type
-    setDataProduct(dataFilter(type))
+    const type = menu[e].type;
+    setDataProduct(dataFilter(type));
     setTab(e);
   };
 
@@ -181,7 +186,7 @@ const Products = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            pb: 3
+            pb: 3,
           }}
         >
           <Typography variant={"h5"} fontWeight={600}>
@@ -205,7 +210,12 @@ const Products = () => {
             </NativeSelect>
           </FormControl>
         </Box>
-        <Grid container spacing={3} p={3} sx={{overflowY: 'auto', height: 650}}>
+        <Grid
+          container
+          spacing={3}
+          p={3}
+          sx={{ overflowY: "auto", height: 650 }}
+        >
           {dataProduct.map((data, index) => (
             <Grid key={index} item>
               <FoodCard props={data} />
