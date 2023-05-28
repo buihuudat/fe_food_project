@@ -29,6 +29,9 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+
+  maxHeight: 500,
+  overflow: "auto",
 };
 
 const menu = [
