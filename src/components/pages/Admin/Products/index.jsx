@@ -105,15 +105,19 @@ const AddToggle = () => {
 };
 
 const Products = () => {
+  const [type, setType] = useState("all");
   const [option, setOption] = useState(0);
   const products = useSelector((state) => state.products.data);
 
   const dataFilter = (type) => {
     const sort = ["createdAt", "price", "price"];
     const reverse = ["desc", "asc", "desc"];
-    let data = _.filter(products, {
-      type: type,
-    });
+    let data =
+      type === "all"
+        ? products
+        : _.filter(products, {
+            type: type,
+          });
     data = _.orderBy(data, [`${sort[option]}`], [`${reverse[option]}`]);
     return data;
   };
@@ -125,10 +129,12 @@ const Products = () => {
     const type = menu[tab].type;
     setDataProduct(dataFilter(type));
   }, [products, option]);
+
   const handleClick = (e) => {
     const type = menu[e].type;
     setDataProduct(dataFilter(type));
     setTab(e);
+    setType(type);
   };
 
   return (

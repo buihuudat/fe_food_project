@@ -1,6 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import _ from 'lodash'
+import _ from "lodash";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
@@ -16,9 +16,9 @@ import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutl
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
-import DiscountIcon from '@mui/icons-material/Discount';
-import MessageIcon from '@mui/icons-material/Message';
-import FeedbackIcon from '@mui/icons-material/Feedback';
+import DiscountIcon from "@mui/icons-material/Discount";
+import MessageIcon from "@mui/icons-material/Message";
+import FeedbackIcon from "@mui/icons-material/Feedback";
 
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -29,71 +29,73 @@ import { useEffect } from "react";
 const drawerWidth = 200;
 
 export default function SideBar() {
-  const navigate = useNavigate()
-  const {pathname} = useLocation()
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const [countOrder, setCountOrder] = useState(0)
+  const [countOrder, setCountOrder] = useState(0);
 
-  const orders = useSelector(state => state.userOrder.getAll)
-  const products = useSelector(state => state.products.data)
-  const users = useSelector(state => state.user.allUser)
-  const vouchers = useSelector(state => state.voucher.data)
-  const feedbacks = useSelector(state => state.user.allFeedback)
+  const orders = useSelector((state) => state.userOrder.getAll);
+  const products = useSelector((state) => state.products.data);
+  const users = useSelector((state) => state.user.allUser);
+  const vouchers = useSelector((state) => state.voucher.data);
+  const feedbacks = useSelector((state) => state.user.allFeedback);
 
   useEffect(() => {
-    orders.map(order => setCountOrder(_.filter(order.products, {'status': false}).length))
-  }, [orders])
+    orders.map((order) =>
+      setCountOrder(_.filter(order.products, { status: false }).length)
+    );
+  }, [orders]);
 
   const headerData = [
     {
       icon: <DashboardIcon />,
       text: "Dashboard",
       path: "/admin",
-      noti: 0
+      noti: 0,
     },
     {
       icon: <AddShoppingCartOutlinedIcon />,
       text: "Products",
       path: "/admin/products",
-      noti: products.length
+      noti: products.length,
     },
     {
       icon: <ShoppingCartOutlinedIcon />,
       text: "Orders",
       path: "/admin/orders",
-      noti: countOrder
+      noti: countOrder,
     },
     {
       icon: <DiscountIcon />,
       text: "Vouchers",
       path: "/admin/vouchers",
-      noti: vouchers.length
+      noti: vouchers.length,
     },
     {
       icon: <AccountCircleOutlinedIcon />,
       text: "Users",
       path: "/admin/users",
-      noti: users.length
+      noti: users.length,
     },
     {
       icon: <MessageIcon />,
       text: "Messages",
       path: "/admin/message",
-      noti: users.length
+      noti: users.length,
     },
     {
       icon: <FeedbackIcon />,
       text: "Feedbacks",
       path: "/admin/feedback",
-      noti: _.filter(feedbacks, {'resolve': false}).length
+      noti: _.filter(feedbacks, { resolve: false }).length,
     },
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate('/')
+    localStorage.removeItem("token");
+    navigate("/");
   };
-  
+
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -124,13 +126,23 @@ export default function SideBar() {
         <Divider />
         <List>
           {headerData.map((data, index) => (
-            <ListItem key={index} disablePadding sx={data.path === pathname ? {background: 'orange', color: 'white'}:{}}>
+            <ListItem
+              key={index}
+              disablePadding
+              sx={
+                data.path === pathname
+                  ? { background: "orange", color: "white" }
+                  : {}
+              }
+            >
               <ListItemButton to={data.path}>
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.text} />
-                {data.noti !== 0 && <ListItemSecondaryAction>
-                  <Chip label={data.noti} />
-                </ListItemSecondaryAction>}
+                {data.noti !== 0 && (
+                  <ListItemSecondaryAction>
+                    <Chip label={data.noti} />
+                  </ListItemSecondaryAction>
+                )}
               </ListItemButton>
             </ListItem>
           ))}

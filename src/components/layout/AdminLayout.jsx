@@ -32,11 +32,14 @@ const AdminLayout = () => {
         setLoading(false);
         navigate("/");
       } else {
-        const products = await productApi.getAll();
-        const vouchers = await voucherApi.getAll();
-        const orders = await userOrderApi.getAll();
-        const users = await userApi.getAll();
-        const feedbacks = await userApi.getFeedback();
+        const [products, vouchers, orders, users, feedbacks] =
+          await Promise.all([
+            productApi.getAll(),
+            voucherApi.getAll(),
+            userOrderApi.getAll(),
+            userApi.getAll(),
+            userApi.getFeedback(),
+          ]);
         dispatch(setAllOrder(orders));
         dispatch(setProducts(products));
         dispatch(setVoucher(vouchers));

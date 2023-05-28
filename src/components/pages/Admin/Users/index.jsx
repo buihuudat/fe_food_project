@@ -1,50 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux'; 
-import {toast} from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
-import { TextField, Button, Modal } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import UpdateModal from './updateModal';
-import { setAdminUpdateModal } from '../../../../redux/reducers/modalReducer'
-import Toast from '../../../common/Toast';
-import userApi from '../../../../api/userApi';
-import { setAllUser } from '../../../../redux/reducers/userReducer';
+import PropTypes from "prop-types";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import { visuallyHidden } from "@mui/utils";
+import { TextField, Button, Modal } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import UpdateModal from "./updateModal";
+import { setAdminUpdateModal } from "../../../../redux/reducers/modalReducer";
+import Toast from "../../../common/Toast";
+import userApi from "../../../../api/userApi";
+import { setAllUser } from "../../../../redux/reducers/userReducer";
 
 export default function Users() {
-  document.title = 'Users | Administrator';
+  document.title = "Users | Administrator";
 
   const dispatch = useDispatch();
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('name');
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("name");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [openModalSubmit, setOpenModalSubmit] = useState(false);
 
-  const users = useSelector(state => state.user.allUser);
-  
+  const users = useSelector((state) => state.user.allUser);
+
   let rows = users;
 
   function descendingComparator(a, b, orderBy) {
@@ -58,7 +58,7 @@ export default function Users() {
   }
 
   function getComparator(order, orderBy) {
-    return order === 'desc'
+    return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
@@ -77,52 +77,58 @@ export default function Users() {
 
   const headCells = [
     {
-      id: 'createdAt',
+      id: "createdAt",
       numeric: false,
       disablePadding: true,
-      label: 'CreatedAt',
+      label: "CreatedAt",
     },
     {
-      id: 'fullname',
+      id: "fullname",
       numeric: false,
       disablePadding: false,
-      label: 'Fullname',
+      label: "Fullname",
     },
     {
-      id: 'email',
+      id: "email",
       numeric: false,
       disablePadding: false,
-      label: 'Email',
+      label: "Email",
     },
     {
-      id: 'phone',
+      id: "phone",
       numeric: false,
       disablePadding: false,
-      label: 'Phone',
+      label: "Phone",
     },
     {
-      id: 'password',
+      id: "password",
       numeric: false,
       disablePadding: true,
-      label: 'Password',
+      label: "Password",
     },
     {
-      id: 'permission',
+      id: "permission",
       numeric: false,
       disablePadding: true,
-      label: 'Permission',
+      label: "Permission",
     },
     {
-      id: 'actions',
+      id: "actions",
       numeric: true,
       disablePadding: false,
-      label: 'Actions',
+      label: "Actions",
     },
   ];
 
   function EnhancedTableHead(props) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-      props;
+    const {
+      onSelectAllClick,
+      order,
+      orderBy,
+      numSelected,
+      rowCount,
+      onRequestSort,
+    } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
@@ -137,26 +143,28 @@ export default function Users() {
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{
-                'aria-label': 'select all desserts',
+                "aria-label": "select all desserts",
               }}
             />
           </TableCell>
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
-              align={headCell.numeric ? 'right' : 'left'}
-              padding={headCell.disablePadding ? 'none' : 'normal'}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -171,30 +179,30 @@ export default function Users() {
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    order: PropTypes.oneOf(["asc", "desc"]).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
   };
 
   const handleView = (row) => {
-    dispatch(setAdminUpdateModal({type: true, data: row}))
-  }
+    dispatch(setAdminUpdateModal({ type: true, data: row }));
+  };
 
   const handleDelete = async (e) => {
     setLoading(true);
     let data = [];
-    selected.length? data = selected:data.push(e._id);
+    selected.length ? (data = selected) : data.push(e._id);
     try {
-      const users = await userApi.delete(data)
-      dispatch(setAllUser(users))
-      Toast('success', 'Deleted successfully!!!');
+      const users = await userApi.delete(data);
+      dispatch(setAllUser(users));
+      Toast("success", "Deleted successfully!!!");
       setLoading(false);
       setSelected([]);
       setOpenModalSubmit(false);
     } catch {
-      Toast('error', 'Ohshit - Has been error!😢');
+      Toast("error", "Ohshit - Has been error!😢");
     }
-  }
+  };
 
   const EnhancedTableToolbar = (props) => {
     const { numSelected } = props;
@@ -206,13 +214,16 @@ export default function Users() {
           pr: { xs: 1, sm: 1 },
           ...(numSelected > 0 && {
             bgcolor: (theme) =>
-              alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
           }),
         }}
       >
         {numSelected > 0 ? (
           <Typography
-            sx={{ flex: '1 1 100%' }}
+            sx={{ flex: "1 1 100%" }}
             color="inherit"
             variant="subtitle1"
             component="div"
@@ -221,7 +232,7 @@ export default function Users() {
           </Typography>
         ) : (
           <Typography
-            sx={{ flex: '1 1 100%' }}
+            sx={{ flex: "1 1 100%" }}
             variant="h6"
             id="tableTitle"
             component="div"
@@ -234,7 +245,7 @@ export default function Users() {
           <Box>
             <Tooltip title="Delete">
               <IconButton onClick={handleDelete}>
-                <DeleteIcon color='error' />
+                <DeleteIcon color="error" />
               </IconButton>
             </Tooltip>
           </Box>
@@ -254,8 +265,8 @@ export default function Users() {
   };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -281,7 +292,7 @@ export default function Users() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
     setSelected(newSelected);
@@ -303,21 +314,23 @@ export default function Users() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ 
-      width: '100%', 
-      display: 'flex', 
-      justifyContent: 'center', 
-      flexDirection: 'column',
-      background: `url()`
-    }}>
-      <Paper sx={{ width: '100%', mb: 1, p: 0 }}>
-        <Box sx={{p:2, fontWeight: 600}}>Total {rows.length}</Box>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        background: `url()`,
+      }}
+    >
+      <Paper sx={{ width: "100%", mb: 1, p: 0 }}>
+        <Box sx={{ p: 2, fontWeight: 600 }}>Total {rows.length}</Box>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size='small'
+            size="small"
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -335,7 +348,7 @@ export default function Users() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row._id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  
+
                   return (
                     <TableRow
                       hover
@@ -345,37 +358,46 @@ export default function Users() {
                       key={row._id}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox"
-                      onClick={(event) => handleClick(event, {...row})}>
+                      <TableCell
+                        padding="checkbox"
+                        onClick={(event) => handleClick(event, { ...row })}
+                      >
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
-                            'aria-labelledby': labelId,
+                            "aria-labelledby": labelId,
                           }}
                         />
-                        </TableCell>
-                      <TableCell 
-                        scope="row"
-                        padding="none"
-                      >
-                          {row.createdAt.split('T')[0]}
+                      </TableCell>
+                      <TableCell scope="row" padding="none">
+                        {row.createdAt.split("T")[0]}
                       </TableCell>
                       <TableCell>{row.fullname}</TableCell>
                       <TableCell>{row.email}</TableCell>
                       <TableCell>{row.phone}</TableCell>
-                      <TableCell padding='none'><TextField variant='standard' disabled defaultValue={row.password} type='password' /></TableCell>
-                      <TableCell>{row.permission===0?'Amin':'User'}</TableCell>
-                      <TableCell align='right' 
-                        > 
-                        <Button 
-                          type='submit'
-                          color='error'
+                      <TableCell padding="none">
+                        <TextField
+                          variant="standard"
+                          disabled
+                          defaultValue={row.password}
+                          type="password"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {row.permission === 0 ? "Admin" : "User"}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          type="submit"
+                          color="error"
                           onClick={() => setOpenModalSubmit(true)}
-                        ><DeleteIcon /></Button>
-                        <Button 
-                          onClick={() => handleView(row)}
-                        ><RemoveRedEyeIcon /></Button>
+                        >
+                          <DeleteIcon />
+                        </Button>
+                        <Button onClick={() => handleView(row)}>
+                          <RemoveRedEyeIcon />
+                        </Button>
                       </TableCell>
                       <Modal
                         open={openModalSubmit}
@@ -384,22 +406,49 @@ export default function Users() {
                       >
                         <Box
                           sx={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            bgcolor: 'background.paper',
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            bgcolor: "background.paper",
                             width: 400,
-                            border: '2px solid #11568C',
+                            border: "2px solid #11568C",
                             boxShadow: 24,
                             p: 4,
-                            textAlign: 'center'
+                            textAlign: "center",
                           }}
                         >
-                          <Typography variant='h5'>Do you want to delete this user?</Typography>
-                          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', pt: 4}}>
-                            <Button variant='outlined' color='primary' sx={{width: '100px'}} onClick={() =>  {setLoading(false); setOpenModalSubmit(false)}}>Cancel</Button>
-                            <LoadingButton variant='outlined' color='error' sx={{width: '100px'}} loading={loading} onClick={() => handleDelete(row)}>Delete</LoadingButton>
+                          <Typography variant="h5">
+                            Do you want to delete this user?
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-around",
+                              pt: 4,
+                            }}
+                          >
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              sx={{ width: "100px" }}
+                              onClick={() => {
+                                setLoading(false);
+                                setOpenModalSubmit(false);
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                            <LoadingButton
+                              variant="outlined"
+                              color="error"
+                              sx={{ width: "100px" }}
+                              loading={loading}
+                              onClick={() => handleDelete(row)}
+                            >
+                              Delete
+                            </LoadingButton>
                           </Box>
                         </Box>
                       </Modal>

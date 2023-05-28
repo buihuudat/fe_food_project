@@ -239,7 +239,7 @@ export default function Navbar() {
             </Box>
           )}
           <Typography variant={"body2"} align="center" color="#333">
-            @2022 Designer by Bui Huu Dat
+            @2022 Designer
           </Typography>
         </Box>
       </Drawer>

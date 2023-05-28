@@ -114,8 +114,6 @@ const HomePage = () => {
     setType(type);
   };
 
-  console.log(dataProduct);
-
   return (
     <Box sx={{ pr: `${drawerWidth}px` }}>
       <Box sx={{ p: 3 }}>
