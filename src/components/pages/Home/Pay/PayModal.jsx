@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -11,8 +11,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import voucherApi from "../../../../api/voucherApi";
 import Toast from "../../../common/Toast";
 import Product from "./Product";
-import userOrderApi from '../../../../api/userOrderApi'
-import productApi from '../../../../api/productApi'
+import userOrderApi from "../../../../api/userOrderApi";
+import productApi from "../../../../api/productApi";
 import { setOrder } from "../../../../redux/reducers/orderReducer";
 import { setCart } from "../../../../redux/reducers/cartReducer";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +33,9 @@ export default function PayModal() {
   const [loading, setLoading] = React.useState(false);
   const [voucherErrText, setVoucherErrText] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [voucher, setVoucher] = useState('')
+  const [voucher, setVoucher] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const payModal = useSelector((state) => state.modal.pay);
   const open = payModal.type;
@@ -52,14 +52,14 @@ export default function PayModal() {
       setVoucherErrText("Bạn chưa nhập voucher");
       return;
     }
-    setLoading(true)
-    setVoucher(voucher)
+    setLoading(true);
+    setVoucher(voucher);
     try {
       const getVoucher = await voucherApi.get({ voucher: voucher });
       if (!getVoucher || getVoucher.data === null) {
         setVoucherErrText("Voucher không đúng hoặc đã được sử dụng");
         setLoading(false);
-        setVoucher('')
+        setVoucher("");
         setDiscount(0);
         return;
       }
@@ -71,12 +71,12 @@ export default function PayModal() {
       setDiscount(0);
       setLoading(false);
       setVoucherErrText("");
-      setVoucher('')
+      setVoucher("");
     }
   };
 
-  let products = []
-  payModal.data.products?.map(product => {
+  let products = [];
+  payModal.data.products?.map((product) => {
     products.push({
       id: product._id,
       image: product.image,
@@ -84,9 +84,9 @@ export default function PayModal() {
       description: product.description,
       count: product.countCartUser,
       price: product.price,
-      discount: product.discount
-    })
-  })
+      discount: product.discount,
+    });
+  });
   const handlePay = async () => {
     const data = {
       products: {
@@ -95,29 +95,38 @@ export default function PayModal() {
         voucher_used: voucher,
       },
       user: payModal.data.user._id,
+    };
+
+    if (!payModal.data.user.address.length) {
+      // eslint-disable-next-line no-restricted-globals
+      const isCf = confirm("Bạn chưa có địa chỉ, thêm địa chỉ?");
+      if (isCf) {
+        navigate("/profile");
+      }
+      return;
     }
-    
-    setLoading(true)
+
+    setLoading(true);
     try {
-      const userOrder = await userOrderApi.create(data)
-      dispatch(setOrder({data: userOrder, status: false}))
-      payModal.data.products.map(async product => {
-        await productApi.update({...product, countCartUser: 0})
-      })
-      Toast('success', 'Đặt hàng thành công')
-      dispatch(setCart([]))
-      dispatch(setPayModal({type: false, data: {}}))
-      setVoucher('')
-      setVoucherErrText('')
-      setLoading(false)
-      navigate('/bills')
+      const userOrder = await userOrderApi.create(data);
+      dispatch(setOrder({ data: userOrder, status: false }));
+      payModal.data.products.map(async (product) => {
+        await productApi.update({ ...product, countCartUser: 0 });
+      });
+      Toast("success", "Đặt hàng thành công");
+      dispatch(setCart([]));
+      dispatch(setPayModal({ type: false, data: {} }));
+      setVoucher("");
+      setVoucherErrText("");
+      setLoading(false);
+      navigate("/bills");
     } catch (error) {
-      Toast('error', 'Sản phẩm đã hết')
-      setLoading(false)
-      setVoucher('')
-      setVoucherErrText('')
+      Toast("error", "Sản phẩm đã hết");
+      setLoading(false);
+      setVoucher("");
+      setVoucherErrText("");
     }
-  }
+  };
 
   return (
     <div>
@@ -178,13 +187,14 @@ export default function PayModal() {
                   Áp dụng
                 </LoadingButton>
               </Box>
-              {discount !== 0 &&
-               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-               <Typography variant="h6">Discount: </Typography>
-               <Typography fontWeight={600} variant="h6" color="orange">
-                {discount}%
-               </Typography>
-             </Box>}
+              {discount !== 0 && (
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="h6">Discount: </Typography>
+                  <Typography fontWeight={600} variant="h6" color="orange">
+                    {discount}%
+                  </Typography>
+                </Box>
+              )}
               <Box
                 pt={2}
                 sx={{ display: "flex", justifyContent: "space-between" }}
@@ -193,7 +203,10 @@ export default function PayModal() {
                   Tổng thanh toán:
                 </Typography>
                 <Typography fontWeight={600} variant="h5" color="orange">
-                  {currentFormat(payModal.data.amount - (payModal.data.amount*discount/100))}
+                  {currentFormat(
+                    payModal.data.amount -
+                      (payModal.data.amount * discount) / 100
+                  )}
                 </Typography>
               </Box>
               <Box

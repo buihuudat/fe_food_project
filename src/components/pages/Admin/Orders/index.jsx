@@ -14,7 +14,8 @@ const Bill = () => {
       ])
   );
 
-  products = _.filter((p) => p.status === false);
+  // products = _.filter((p) => p.status === false);
+  // console.log(products);
 
   return !products.length ? (
     <Typography align="center" fontSize={30}>
