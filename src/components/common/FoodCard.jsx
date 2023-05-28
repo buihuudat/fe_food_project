@@ -12,8 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-import React, {useEffect} from "react";
-import _ from "lodash";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import currentFormat from "../../handler/currentFormat";
@@ -23,7 +22,8 @@ import Toast from "./Toast";
 import { setProducts } from "../../redux/reducers/productReducer";
 import { setCart } from "../../redux/reducers/cartReducer";
 import LoadingButton from "@mui/lab/LoadingButton";
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import { useLocation } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -39,10 +39,11 @@ const style = {
 
 const FoodCard = ({ props }) => {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const [open, setOpen] = React.useState(false);
   const { permission } = useSelector((state) => state.user.value);
   const addCart = useSelector((state) => state.cart.data);
-  const dataProduct = useSelector(state => state.products.data)
+  const dataProduct = useSelector((state) => state.products.data);
   const handleDelete = async (e) => {
     try {
       const product = await productApi.delete(e);
@@ -63,7 +64,7 @@ const FoodCard = ({ props }) => {
     let isExist = false;
     let cartItems = [...addCart];
     let productItems = [...dataProduct];
-    
+
     cartItems.map((v, i) => {
       if (e._id === v._id) {
         isExist = true;
@@ -80,12 +81,12 @@ const FoodCard = ({ props }) => {
         productItems[i] = {
           ...v,
           count: v.count - 1,
-          countCartUser: v.countCartUser + 1
-        }
-        dispatch(setProducts([...productItems]))
+          countCartUser: v.countCartUser + 1,
+        };
+        dispatch(setProducts([...productItems]));
       }
-    })
-    
+    });
+
     isExist && dispatch(setCart([...cartItems]));
 
     !isExist &&
@@ -102,14 +103,14 @@ const FoodCard = ({ props }) => {
   };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   return (
     <Box>
       <Card sx={{ width: 180 }}>
         <CardContent>
           <CardMedia
-            sx={{ width: "100%", height: "100px", objectFit: 'fill' }}
+            sx={{ width: "100%", height: "100px", objectFit: "fill" }}
             component="img"
             image={props.image}
           />
@@ -152,22 +153,24 @@ const FoodCard = ({ props }) => {
                 props.price - (props.price * props.discount) / 100
               )}
             </Typography>
-            {props.countCartUser > 0 ? 
-            <IconButton disabled >
-              <PlaylistAddCheckIcon color="success" />
-            </IconButton> : 
-              <IconButton onClick={() => handleAdd(props)}>
-                <AddShoppingCartIcon color="primary" />
-              </IconButton>
-            }
+            {pathname.split("/")[1] !== "admin" &&
+              (props.countCartUser > 0 ? (
+                <IconButton disabled>
+                  <PlaylistAddCheckIcon color="success" />
+                </IconButton>
+              ) : (
+                <IconButton onClick={() => handleAdd(props)}>
+                  <AddShoppingCartIcon color="primary" />
+                </IconButton>
+              ))}
           </Box>
-          {permission === 0 && (
+          {pathname.split("/")[1] === "admin" && permission === 0 && (
             <Typography variant="body2" fontWeight={600} color="primary">
               Số lượng: {props.count}
             </Typography>
           )}
         </CardContent>
-        {permission === 0 && (
+        {pathname.split("/")[1] === "admin" && permission === 0 && (
           <Box
             sx={{
               display: "flex",
@@ -203,7 +206,12 @@ const FoodCard = ({ props }) => {
               gap: 2,
             }}
           >
-            <Button onClick={handleClose} color="primary" fullWidth variant="outlined">
+            <Button
+              onClick={handleClose}
+              color="primary"
+              fullWidth
+              variant="outlined"
+            >
               Hủy
             </Button>
             <LoadingButton
