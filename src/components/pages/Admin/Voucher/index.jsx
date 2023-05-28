@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Fab, Grid, Typography } from "@mui/material";
+import { Box, Button, Fab, Grid, Typography } from "@mui/material";
 import Item from "./Item";
 import { useDispatch, useSelector } from "react-redux";
 import AddVoucher from "./AddVoucher";
@@ -27,35 +27,39 @@ const Vouchers = () => {
     dispatch(setAddVoucherModal(true));
   };
 
-  return !voucherData.length ? (
-    <Typography align="center" fontSize={30}>
-      Chưa có voucher
-    </Typography>
-  ) : (
-    <div>
-      <Box p={3}>
-        <Grid container spacing={3}>
-          {voucherData.map((voucher, index) => (
-            <Grid key={index} item xs={2.5}>
-              <Item props={voucher} />
+  return (
+    <Box>
+      {!voucherData.length ? (
+        <Typography align="center" fontSize={30}>
+          Chưa có voucher
+        </Typography>
+      ) : (
+        <div>
+          <Box p={3}>
+            <Grid container spacing={3}>
+              {voucherData.map((voucher, index) => (
+                <Grid key={index} item xs={2.5}>
+                  <Item props={voucher} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-        <Fab
-          color="primary"
-          sx={{
-            position: "absolute",
-            bottom: (theme) => theme.spacing(2),
-            right: (theme) => theme.spacing(2),
-          }}
-          onClick={handleAdd}
-        >
-          <AddIcon />
-        </Fab>
-        <AddVoucher />
-        <DeleteModal />
-      </Box>
-    </div>
+          </Box>
+        </div>
+      )}
+      <Fab
+        color="primary"
+        sx={{
+          position: "absolute",
+          bottom: (theme) => theme.spacing(2),
+          right: (theme) => theme.spacing(2),
+        }}
+        onClick={handleAdd}
+      >
+        <AddIcon />
+      </Fab>
+      <AddVoucher />
+      <DeleteModal />
+    </Box>
   );
 };
 
