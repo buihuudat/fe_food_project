@@ -9,29 +9,28 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
-import currentFormat from '../../../../handler/currentFormat'
+import LoadingButton from "@mui/lab/LoadingButton";
+import currentFormat from "../../../../handler/currentFormat";
 import { useState } from "react";
 import { useEffect } from "react";
-import userApi from '../../../../api/userApi'
-import userOrderApi from '../../../../api/userOrderApi'
-import Toast from '../../../common/Toast'
+import userApi from "../../../../api/userApi";
+import userOrderApi from "../../../../api/userOrderApi";
+import Toast from "../../../common/Toast";
 import { useDispatch } from "react-redux";
-import { setOrder } from '../../../../redux/reducers/orderReducer'
+import { setOrder } from "../../../../redux/reducers/orderReducer";
 
-const CardOrder = ({ props, amount, id }) => {
-  const [user, setUser] = useState({})
-  const [loading, setLoading] = useState(false)
+const CardOrder = ({ props, amount, id, loading, setLoading }) => {
+  const [user, setUser] = useState({});
   const products = props.product;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await userApi.get({_id: props.UID})
-      setUser(user)
-    }
-    getUser()
-  }, [props])
+      const user = await userApi.get({ _id: props.UID });
+      setUser(user);
+    };
+    getUser();
+  }, [props]);
 
   const CartProduct = (product) => (
     <Paper
@@ -71,7 +70,9 @@ const CardOrder = ({ props, amount, id }) => {
             }}
           >
             <Typography color="orange" fontWeight={600}>
-              {currentFormat(product.price - (product.price * product.discount) / 100)}
+              {currentFormat(
+                product.price - (product.price * product.discount) / 100
+              )}
             </Typography>
             <Typography color="orange">*{product.count}</Typography>
           </Box>
@@ -81,26 +82,41 @@ const CardOrder = ({ props, amount, id }) => {
   );
 
   const handleConfirm = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      await userOrderApi.update({_id: id, id_product: props._id, status: true})
-      const orders = await userOrderApi.getAll()
-      dispatch(setOrder({data: orders, status: false}))
-      setLoading(false)
-      Toast('success', 'Đã xác nhận đơn hàng')
+      await userOrderApi.update({
+        _id: id,
+        id_product: props._id,
+        status: true,
+      });
+      const orders = await userOrderApi.getAll();
+      dispatch(setOrder({ data: orders, status: false }));
+      setLoading(false);
+      Toast("success", "Đã xác nhận đơn hàng");
     } catch (error) {
-      setLoading(false)
-      Toast('error', 'Xác nhận đơn hàng thất bại')
+      setLoading(false);
+      Toast("error", "Xác nhận đơn hàng thất bại");
     }
-  }
+  };
+
+  const { city, district, ward, street } = user?.address[0];
 
   return (
     <Box>
       <Grid container spacing={3}>
         <Grid item>
-          <Card sx={{
-            width: 350
-          }}>
+          <Card
+            sx={{
+              width: 350,
+            }}
+          >
+            <Paper>
+              <Typography fontWeight={600}>{user.fullname}</Typography>
+              <Typography fontStyle={"italic"}>{user.phone}</Typography>
+              <Typography
+                fontStyle={"italic"}
+              >{`${street}, ${ward}, ${district}, ${city}`}</Typography>
+            </Paper>
             <CardContent>
               {products.map((product) => (
                 <CartProduct key={product.id} {...product} />
@@ -109,7 +125,7 @@ const CardOrder = ({ props, amount, id }) => {
               <Typography
                 sx={{
                   background: "orange",
-                  m: '10px 0',
+                  m: "10px 0",
                   borderRadius: "5px",
                 }}
                 variant="h5"
@@ -120,17 +136,36 @@ const CardOrder = ({ props, amount, id }) => {
               >
                 {currentFormat(amount)}
               </Typography>
-              <LoadingButton
-                loading={loading}
-                variant='contained'
-                color='primary'
+              {!props.status ? (
+                <LoadingButton
+                  loading={loading}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                  onClick={handleConfirm}
+                >
+                  Xác nhận đơn hàng
+                </LoadingButton>
+              ) : (
+                <Button
+                  disabled
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  sx={{ mb: 1 }}
+                >
+                  Đang giao hàng
+                </Button>
+              )}
+              <Button
+                href={`tel:${user.phone}`}
                 fullWidth
-                sx={{mb: 1}}
-                onClick={handleConfirm}
+                variant="contained"
+                color="success"
               >
-                Xác nhận đơn hàng
-              </LoadingButton>
-              <Button href={`tel:${user.phone}`} fullWidth variant='contained' color='success'>Liên hệ với người mua</Button>
+                Liên hệ với người mua
+              </Button>
             </CardContent>
           </Card>
         </Grid>

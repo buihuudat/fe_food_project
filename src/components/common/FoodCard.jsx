@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   IconButton,
@@ -19,7 +20,10 @@ import currentFormat from "../../handler/currentFormat";
 import { setUpdateModal } from "../../redux/reducers/modalReducer";
 import productApi from "../../api/productApi";
 import Toast from "./Toast";
-import { setProducts } from "../../redux/reducers/productReducer";
+import {
+  setProductDetails,
+  setProducts,
+} from "../../redux/reducers/productReducer";
 import { setCart } from "../../redux/reducers/cartReducer";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
@@ -102,43 +106,56 @@ const FoodCard = ({ props }) => {
       );
   };
 
+  const handleViewProductDetail = () => {
+    dispatch(
+      setProductDetails({
+        status: true,
+        data: props,
+      })
+    );
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
   return (
     <Box>
       <Card sx={{ width: 180 }}>
-        <CardContent>
-          <CardMedia
-            sx={{ width: "100%", height: "100px", objectFit: "fill" }}
-            component="img"
-            image={props.image}
-          />
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: 150,
-              p: 0,
-              pt: 3,
-            }}
-          >
-            <Typography variant="body1" fontWeight={600}>
-              {props.name}
-            </Typography>
-            <Typography variant="body2" pt={1} pb={1}>
-              {props.description}
-            </Typography>
-            <Typography
-              variant="body1"
-              mt="auto"
-              fontWeight={500}
-              color="orange"
-              sx={{ textDecoration: "line-through" }}
+        <CardContent sx={{ m: 0, p: 0 }}>
+          <CardActionArea onClick={handleViewProductDetail}>
+            <CardMedia
+              sx={{ width: "100%", height: "100px", objectFit: "fill" }}
+              component="img"
+              image={props.image}
+            />
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+                height: 70,
+                p: 0,
+                pt: 1,
+              }}
             >
-              {props.discount !== 0 && currentFormat(props.price)}
-            </Typography>
-          </CardContent>
+              <Typography variant="body1" fontSize={20} fontWeight={600}>
+                {props.name}
+              </Typography>
+              {/* <Typography variant="body2" pt={1} pb={1}>
+                {props.description}
+              </Typography> */}
+              <Typography
+                variant="body1"
+                mt="auto"
+                fontWeight={500}
+                color="orange"
+                sx={{ textDecoration: "line-through" }}
+              >
+                {props.discount !== 0 && currentFormat(props.price)}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+
           <Box
             mt="auto"
             sx={{
@@ -146,6 +163,7 @@ const FoodCard = ({ props }) => {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              px: 2,
             }}
           >
             <Typography variant="h5" fontWeight={600} color="orange">
@@ -164,12 +182,14 @@ const FoodCard = ({ props }) => {
                 </IconButton>
               ))}
           </Box>
+
           {pathname.split("/")[1] === "admin" && permission === 0 && (
             <Typography variant="body2" fontWeight={600} color="primary">
               Số lượng: {props.count}
             </Typography>
           )}
         </CardContent>
+
         {pathname.split("/")[1] === "admin" && permission === 0 && (
           <Box
             sx={{

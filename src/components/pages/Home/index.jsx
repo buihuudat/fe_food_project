@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import PayModal from "./Pay/PayModal";
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
+import ProductDetail from "../../common/ProductDetail";
 const menu = [
   // {
   //   icon: (
@@ -197,7 +198,7 @@ const HomePage = () => {
           container
           spacing={3}
           p={3}
-          sx={{ overflowY: "auto", height: 620 }}
+          sx={{ overflowY: "auto", height: 620, mx: "auto" }}
         >
           {dataProduct.map((data, index) => {
             if (data.count > 0) {
@@ -210,6 +211,7 @@ const HomePage = () => {
           })}
         </Grid>
       </Box>
+      <ProductDetail />
       <Pay drawerWidth={drawerWidth} />
       <PayModal />
     </Box>
