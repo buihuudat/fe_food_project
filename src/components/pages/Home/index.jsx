@@ -211,7 +211,6 @@ const HomePage = () => {
           })}
         </Grid>
       </Box>
-      <ProductDetail />
       <Pay drawerWidth={drawerWidth} />
       <PayModal />
     </Box>

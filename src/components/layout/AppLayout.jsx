@@ -19,6 +19,7 @@ import Signup from "../pages/Auth/Signup";
 import Notification from "../pages/Notification";
 import Message from "../pages/Message";
 import Support from "../pages/Support";
+import ProductDetail from "../common/ProductDetail";
 
 const AppLayout = () => {
   const [loadingState, setLoadingState] = useState(false);
@@ -71,6 +72,7 @@ const AppLayout = () => {
         <Notification />
         <Message />
         <Support />
+        <ProductDetail />
       </Box>
     </Box>
   );
