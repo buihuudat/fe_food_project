@@ -18,6 +18,7 @@ import userApi from "../../api/userApi";
 import voucherApi from "../../api/voucherApi";
 import userOrderApi from "../../api/userOrderApi";
 import { setAllOrder } from "../../redux/reducers/orderReducer";
+import ProductDetail from "../common/ProductDetail";
 
 const AdminLayout = () => {
   const [loading, setLoading] = useState(false);
@@ -57,6 +58,7 @@ const AdminLayout = () => {
       <SideBar />
       <Box sx={{ flexGrow: 1 }}>
         <Outlet />
+        <ProductDetail />
       </Box>
     </Box>
   ) : (
