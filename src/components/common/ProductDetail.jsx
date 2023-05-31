@@ -57,7 +57,7 @@ export default function ProductDetail() {
               fontSize={35}
               color={"orange"}
             >
-              {currentFormat(data.price)} $
+              {currentFormat(data.price)}
             </Typography>
           </Box>
         </Box>
