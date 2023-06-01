@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardContent,
   CircularProgress,
   Grid,
@@ -20,6 +21,7 @@ import userOrderApi from "../../../../api/userOrderApi";
 import Toast from "../../../common/Toast";
 import { useDispatch } from "react-redux";
 import { setOrder } from "../../../../redux/reducers/orderReducer";
+import { setProductDetails } from "../../../../redux/reducers/productReducer";
 
 const CardOrder = ({ props, amount, id, loading, setLoading }) => {
   const [user, setUser] = useState({});
@@ -46,11 +48,23 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
     getUser();
   }, [props]);
 
+  const handleViewProductDetail = (product) => {
+    dispatch(
+      setProductDetails({
+        status: true,
+        data: product,
+      })
+    );
+  };
+
   const CartProduct = (product) => (
     <Paper
+      component={CardActionArea}
+      onClick={() => handleViewProductDetail(product)}
       sx={{
         mt: 3,
         p: 1,
+        width: "100%",
       }}
     >
       <Box

@@ -100,12 +100,12 @@ export default function Users() {
       disablePadding: false,
       label: "Phone",
     },
-    {
-      id: "password",
-      numeric: false,
-      disablePadding: true,
-      label: "Password",
-    },
+    // {
+    //   id: "password",
+    //   numeric: false,
+    //   disablePadding: true,
+    //   label: "Password",
+    // },
     {
       id: "permission",
       numeric: false,
@@ -376,14 +376,14 @@ export default function Users() {
                       <TableCell>{row.fullname}</TableCell>
                       <TableCell>{row.email}</TableCell>
                       <TableCell>{row.phone}</TableCell>
-                      <TableCell padding="none">
+                      {/* <TableCell padding="none">
                         <TextField
                           variant="standard"
                           disabled
                           defaultValue={row.password}
                           type="password"
                         />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         {row.permission === 0 ? "Admin" : "User"}
                       </TableCell>

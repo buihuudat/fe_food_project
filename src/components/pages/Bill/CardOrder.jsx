@@ -4,17 +4,32 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardContent,
   Grid,
   Paper,
   Typography,
 } from "@mui/material";
 import currentFormat from "../../../handler/currentFormat";
+import { useDispatch } from "react-redux";
+import { setProductDetails } from "../../../redux/reducers/productReducer";
 const CardOrder = ({ props, amount }) => {
   const products = props.product;
+  const dispatch = useDispatch();
+
+  const handleViewProductDetails = (product) => {
+    dispatch(
+      setProductDetails({
+        status: true,
+        data: product,
+      })
+    );
+  };
 
   const CartProduct = (product) => (
     <Paper
+      component={CardActionArea}
+      onClick={() => handleViewProductDetails(product)}
       sx={{
         mt: 3,
         p: 1,
@@ -43,7 +58,7 @@ const CardOrder = ({ props, amount }) => {
           <Typography fontWeight={600} variant="h6">
             {product.name}
           </Typography>
-          <Typography variant="subtitle2">{product.description}</Typography>
+          {/* <Typography variant="subtitle2">{product.description}</Typography> */}
           <Box
             sx={{
               display: "flex",
@@ -52,7 +67,9 @@ const CardOrder = ({ props, amount }) => {
             }}
           >
             <Typography color="orange" fontWeight={600}>
-              {currentFormat(product.price - (product.price * product.discount) / 100)}
+              {currentFormat(
+                product.price - (product.price * product.discount) / 100
+              )}
             </Typography>
             <Typography color="orange">*{product.count}</Typography>
           </Box>
@@ -73,7 +90,7 @@ const CardOrder = ({ props, amount }) => {
               <Typography
                 sx={{
                   background: "orange",
-                  m: '10px 0',
+                  m: "10px 0",
                   borderRadius: "5px",
                 }}
                 variant="h5"
@@ -86,9 +103,9 @@ const CardOrder = ({ props, amount }) => {
               </Typography>
               <Typography
                 sx={{
-                  m: '10px 0',
+                  m: "10px 0",
                   borderRadius: "5px",
-                  outline: '1px solid orange'
+                  outline: "1px solid orange",
                 }}
                 variant="h6"
                 align="center"
@@ -98,7 +115,9 @@ const CardOrder = ({ props, amount }) => {
               >
                 Đang giao ...
               </Typography>
-              <Button fullWidth variant='contained' color='success'>Liên hệ với người bán</Button>
+              <Button fullWidth variant="contained" color="success">
+                Liên hệ với người bán
+              </Button>
             </CardContent>
           </Card>
         </Grid>

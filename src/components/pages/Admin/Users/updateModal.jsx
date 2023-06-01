@@ -61,6 +61,7 @@ const UpdateModal = () => {
   };
   const handleClose = () => {
     dispatch(setAdminUpdateModal({ type: false, data: {} }));
+    setDisable(true);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,12 +171,12 @@ const UpdateModal = () => {
             defaultValue={modal.data.phone}
             fullWidth
             margin="normal"
-            disabled={disable}
+            disabled={true}
             error={phoneErrText !== ""}
             helperText={phoneErrText}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <TextField
+          {/* <TextField
             variant="outlined"
             label="password"
             name="password"
@@ -187,8 +188,8 @@ const UpdateModal = () => {
             error={passwordErrText !== ""}
             helperText={passwordErrText}
             onChange={(e) => setPassword(e.target.value)}
-          />
-          <TextField
+          /> */}
+          {/* <TextField
             sx={disable ? { display: "none" } : {}}
             variant="outlined"
             label="ConfirmPassword"
@@ -200,7 +201,7 @@ const UpdateModal = () => {
             error={confirmPasswordErrText !== ""}
             helperText={confirmPasswordErrText}
             onChange={(e) => setConfirmPassword(e.target.value)}
-          />
+          /> */}
 
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Role</InputLabel>
