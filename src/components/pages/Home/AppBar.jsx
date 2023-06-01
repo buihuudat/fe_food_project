@@ -102,10 +102,9 @@ export default function SearchAppBar() {
               position: "absolute",
             }}
           >
-            {productResult.length &&
-              productResult.map((product, i) => (
-                <SearchCard key={i} product={product} />
-              ))}
+            {productResult.map((product, i) => (
+              <SearchCard key={i} product={product} />
+            ))}
           </Box>
         </Search>
       </Box>
