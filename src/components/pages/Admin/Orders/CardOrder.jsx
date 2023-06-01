@@ -75,7 +75,7 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
           <Typography fontWeight={600} variant="h6">
             {product.name}
           </Typography>
-          <Typography variant="subtitle2">{product.description}</Typography>
+          {/* <Typography variant="subtitle2">{product.description}</Typography> */}
           <Box
             sx={{
               display: "flex",
