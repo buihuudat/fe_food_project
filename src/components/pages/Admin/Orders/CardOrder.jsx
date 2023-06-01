@@ -5,7 +5,9 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
+  LinearProgress,
   Paper,
   Typography,
 } from "@mui/material";
@@ -21,6 +23,12 @@ import { setOrder } from "../../../../redux/reducers/orderReducer";
 
 const CardOrder = ({ props, amount, id, loading, setLoading }) => {
   const [user, setUser] = useState({});
+  const [address, setAddress] = useState({
+    city: "",
+    district: "",
+    ward: "",
+    street: "",
+  });
   const products = props.product;
   const dispatch = useDispatch();
 
@@ -28,6 +36,12 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
     const getUser = async () => {
       const user = await userApi.get({ _id: props.UID });
       setUser(user);
+      setAddress({
+        city: user?.address[0].city,
+        district: user?.address[0].district,
+        ward: user?.address[0].ward,
+        street: user?.address[0].street,
+      });
     };
     getUser();
   }, [props]);
@@ -99,8 +113,6 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
     }
   };
 
-  const { city, district, ward, street } = user?.address[0];
-
   return (
     <Box>
       <Grid container spacing={3}>
@@ -110,13 +122,17 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
               width: 350,
             }}
           >
-            <Paper>
-              <Typography fontWeight={600}>{user.fullname}</Typography>
-              <Typography fontStyle={"italic"}>{user.phone}</Typography>
-              <Typography
-                fontStyle={"italic"}
-              >{`${street}, ${ward}, ${district}, ${city}`}</Typography>
-            </Paper>
+            {!address.city ? (
+              <CircularProgress />
+            ) : (
+              <Paper>
+                <Typography fontWeight={600}>{user.fullname}</Typography>
+                <Typography fontStyle={"italic"}>{user.phone}</Typography>
+                <Typography fontStyle={"italic"}>
+                  {`${address.street}, ${address.ward}, ${address.district}, ${address.city}`}
+                </Typography>
+              </Paper>
+            )}
             <CardContent>
               {products.map((product) => (
                 <CartProduct key={product.id} {...product} />
