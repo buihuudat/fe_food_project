@@ -238,9 +238,9 @@ export default function Navbar() {
               </Button>
             </Box>
           )}
-          <Typography variant={"body2"} align="center" color="#333">
+          {/* <Typography variant={"body2"} align="center" color="#333">
             @2022 Designer
-          </Typography>
+          </Typography> */}
         </Box>
       </Drawer>
     </Box>
