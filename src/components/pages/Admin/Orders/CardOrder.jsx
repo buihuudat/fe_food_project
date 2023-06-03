@@ -23,7 +23,7 @@ import { useDispatch } from "react-redux";
 import { setOrder } from "../../../../redux/reducers/orderReducer";
 import { setProductDetails } from "../../../../redux/reducers/productReducer";
 
-const CardOrder = ({ props, amount, id, loading, setLoading }) => {
+const CardOrder = ({ props, id, loading, setLoading }) => {
   const [user, setUser] = useState({});
   const [address, setAddress] = useState({
     city: "",
@@ -84,6 +84,7 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            width: 200,
           }}
         >
           <Typography fontWeight={600} variant="h6">
@@ -148,9 +149,18 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
               </Paper>
             )}
             <CardContent>
-              {products.map((product) => (
-                <CartProduct key={product.id} {...product} />
-              ))}
+              <Box sx={{ maxHeight: 240, overflow: "auto" }}>
+                {products.map((product) => (
+                  <CartProduct key={product.id} {...product} />
+                ))}
+              </Box>
+
+              <Typography fontStyle={"italic"}>
+                {props?.voucher_used ? "voucher: " + props.voucher_used : ""}
+              </Typography>
+              <Typography>
+                {/* voucher: {props?.voucher_used ? props.voucher_used : ""} */}
+              </Typography>
 
               <Typography
                 sx={{
@@ -164,7 +174,7 @@ const CardOrder = ({ props, amount, id, loading, setLoading }) => {
                 color="white"
                 p={1}
               >
-                {currentFormat(amount)}
+                {currentFormat(props.amount)}
               </Typography>
               {!props.status ? (
                 <LoadingButton

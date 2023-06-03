@@ -27,7 +27,6 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import PayModal from "./Pay/PayModal";
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
-import ProductDetail from "../../common/ProductDetail";
 const menu = [
   // {
   //   icon: (

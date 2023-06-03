@@ -16,7 +16,9 @@ const Bought = () => {
     const getOrder = async () => {
       const orders = await userOrderApi.get(user);
       dispatch(setOrder({ data: orders, status: false }));
-      setProducts(orders.products);
+      setProducts(
+        orders.products ? orders.products.filter((p) => p.status === true) : []
+      );
       setLoading(false);
     };
     getOrder();
@@ -30,7 +32,7 @@ const Bought = () => {
         </Typography>
       ) : (
         <Grid container spacing={3} p={3}>
-          {products?.map((product, index) => {
+          {products.map((product, index) => {
             if (product.status) {
               return (
                 <Grid key={index} item>

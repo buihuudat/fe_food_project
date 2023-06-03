@@ -13,12 +13,12 @@ import currentFormat from "../../../handler/currentFormat";
 import PayModal from "../Home/Pay/PayModal";
 import { useDispatch, useSelector } from "react-redux";
 import { setPayModal } from "../../../redux/reducers/modalReducer";
-import moment from 'moment'
+import moment from "moment";
 
 const CardOrder = ({ props, amount }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const products = props.product;
-  const user = useSelector(state => state.user.value)
+  const user = useSelector((state) => state.user.value);
 
   const CartProduct = (product) => (
     <Paper
@@ -59,7 +59,9 @@ const CardOrder = ({ props, amount }) => {
             }}
           >
             <Typography color="orange" fontWeight={600}>
-              {currentFormat(product.price - (product.price * product.discount) / 100)}
+              {currentFormat(
+                product.price - (product.price * product.discount) / 100
+              )}
             </Typography>
             <Typography color="orange">*{product.count}</Typography>
           </Box>
@@ -67,23 +69,32 @@ const CardOrder = ({ props, amount }) => {
       </Box>
     </Paper>
   );
-  
-  let assignProducts = []
-  props.product.map(product => assignProducts.push({...product, countCartUser: product.count}))
+
+  let assignProducts = [];
+  props.product.map((product) =>
+    assignProducts.push({ ...product, countCartUser: product.count })
+  );
   const handleReBought = () => {
     const data = {
       products: assignProducts,
       user: user,
       amount: props.amount,
-    }
-    dispatch(setPayModal({ data: data, type: true}))
-  }
+    };
+    dispatch(setPayModal({ data: data, type: true }));
+  };
   return (
     <Box>
       <Grid container spacing={3}>
         <Grid item>
           <Card>
-            <Typography align="right" fontWeight={600} p={1} sx={{fontStyle: 'italic'}}>{moment(props.createdAt).format('L')}</Typography>
+            <Typography
+              align="right"
+              fontWeight={600}
+              p={1}
+              sx={{ fontStyle: "italic" }}
+            >
+              {moment(props.createdAt).format("L")}
+            </Typography>
             <CardContent>
               {products.map((product) => (
                 <CartProduct key={product.id} {...product} />
@@ -92,7 +103,7 @@ const CardOrder = ({ props, amount }) => {
               <Typography
                 sx={{
                   background: "orange",
-                  m: '10px 0',
+                  m: "10px 0",
                   borderRadius: "5px",
                 }}
                 variant="h5"
@@ -104,19 +115,21 @@ const CardOrder = ({ props, amount }) => {
                 {currentFormat(amount)}
               </Typography>
               <Button
-                variant='contained'
+                variant="contained"
                 fullWidth
                 onClick={handleReBought}
-                sx={{mb: 1}}
+                sx={{ mb: 1 }}
               >
                 Mua lại
               </Button>
-              <Button fullWidth variant='contained' color='success'>Liên hệ với người bán</Button>
+              <Button fullWidth variant="contained" color="success">
+                Liên hệ với người bán
+              </Button>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
-      <PayModal />  
+      <PayModal />
     </Box>
   );
 };

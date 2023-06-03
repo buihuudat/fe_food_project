@@ -24,18 +24,35 @@ const Bill = () => {
     };
     getOrders();
   }, [loading]);
-  let products = [];
-  orders.map(
-    (order) =>
-      (products = [
-        ...order.products.map((data) => (data = { ...data, UID: order.user })),
-      ])
-  );
-
-  products = _.filter(products, { status: statusProduct });
 
   const handleChange = (e) => {
     setStatusProduct(e.target.value);
+  };
+
+  const extractedData = () => {
+    let pr2 = [];
+    orders.map((item) => {
+      console.log(item);
+
+      const _id = item._id;
+      const UID = item.user;
+
+      return item.products.map(
+        (product) =>
+          (pr2 = [
+            ...pr2,
+            {
+              product: product.product,
+              amount: product.amount,
+              status: product.status,
+              voucher_used: product.voucher_used,
+              _id,
+              UID,
+            },
+          ])
+      );
+    });
+    return pr2;
   };
 
   return (
@@ -55,25 +72,27 @@ const Bill = () => {
           <MenuItem value={true}>Đã xác nhận</MenuItem>
         </Select>
       </FormControl>
-      {!products.length ? (
+      {!extractedData().length ? (
         <Typography align="center" fontSize={30}>
           Chưa có order
         </Typography>
       ) : (
         <Grid container spacing={3} p={3}>
-          {products.map((product, index) => {
-            return (
-              <Grid key={index} item>
-                <CardOrder
-                  props={product}
-                  amount={product.amount}
-                  id={orders._id}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              </Grid>
-            );
-          })}
+          {extractedData()
+            .filter((p) => p.status === statusProduct)
+            .map((product, index) => {
+              return (
+                <Grid key={index} item>
+                  <CardOrder
+                    props={product}
+                    amount={product.amount}
+                    id={orders._id}
+                    loading={loading}
+                    setLoading={setLoading}
+                  />
+                </Grid>
+              );
+            })}
         </Grid>
       )}
     </Box>

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import userOrderApi from "../../../api/userOrderApi";
 import { setOrder } from "../../../redux/reducers/orderReducer";
 import CardOrder from "./CardOrder";
+import voucherApi from "../../../api/voucherApi";
 
 const Bill = () => {
   const [products, setProducts] = useState([]);
@@ -16,13 +17,15 @@ const Bill = () => {
     const getOrder = async () => {
       const orders = await userOrderApi.get(user);
       dispatch(setOrder({ data: orders, status: false }));
-      setProducts(orders.products);
+      setProducts(orders.products ?? []);
       setLoading(false);
     };
     getOrder();
   }, [dispatch, user]);
 
-  return (
+  return loading ? (
+    <LinearProgress />
+  ) : (
     <Box>
       {products.length ? (
         <Grid container spacing={3} p={3}>

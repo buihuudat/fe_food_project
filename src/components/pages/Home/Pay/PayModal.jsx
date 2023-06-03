@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setPayModal } from "../../../../redux/reducers/modalReducer";
-import { Chip, Divider, TextField } from "@mui/material";
+import { Chip, Divider, Paper, TextField } from "@mui/material";
 import currentFormat from "../../../../handler/currentFormat";
 import LoadingButton from "@mui/lab/LoadingButton";
 import voucherApi from "../../../../api/voucherApi";
@@ -141,9 +141,11 @@ export default function PayModal() {
             Thanh toán đơn hàng
           </Typography>
           <Box>
-            {payModal.data.products?.map((product, index) => (
-              <Product key={index} props={product} />
-            ))}
+            <Paper sx={{ maxHeight: 300, overflow: "auto" }}>
+              {payModal.data.products?.map((product, index) => (
+                <Product key={index} props={product} />
+              ))}
+            </Paper>
             <Box pt={3}>
               <Divider>
                 <Chip label="Thanh toán" />

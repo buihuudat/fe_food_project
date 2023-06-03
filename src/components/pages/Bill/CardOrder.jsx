@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -13,7 +13,9 @@ import {
 import currentFormat from "../../../handler/currentFormat";
 import { useDispatch } from "react-redux";
 import { setProductDetails } from "../../../redux/reducers/productReducer";
+import voucherApi from "../../../api/voucherApi";
 const CardOrder = ({ props, amount }) => {
+  const [discount, setDiscount] = useState(0);
   const products = props.product;
   const dispatch = useDispatch();
 
@@ -26,6 +28,14 @@ const CardOrder = ({ props, amount }) => {
     );
   };
 
+  useEffect(() => {
+    const getDiscount = async () => {
+      const rs = await voucherApi.get({ voucher: props.voucher_used });
+      setDiscount(rs.discount ? "-" + rs.discount + "%" : 0);
+    };
+    getDiscount();
+  }, [props.voucher_used]);
+
   const CartProduct = (product) => (
     <Paper
       component={CardActionArea}
@@ -33,6 +43,7 @@ const CardOrder = ({ props, amount }) => {
       sx={{
         mt: 3,
         p: 1,
+        minWidth: 300,
       }}
     >
       <Box
@@ -53,6 +64,8 @@ const CardOrder = ({ props, amount }) => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            textAlign: "start",
+            width: 200,
           }}
         >
           <Typography fontWeight={600} variant="h6">
@@ -71,7 +84,7 @@ const CardOrder = ({ props, amount }) => {
                 product.price - (product.price * product.discount) / 100
               )}
             </Typography>
-            <Typography color="orange">*{product.count}</Typography>
+            <Typography color="orange">SL:{product.count}</Typography>
           </Box>
         </Box>
       </Box>
@@ -83,10 +96,14 @@ const CardOrder = ({ props, amount }) => {
         <Grid item>
           <Card>
             <CardContent>
-              {products.map((product) => (
-                <CartProduct key={product.id} {...product} />
-              ))}
-
+              <Paper sx={{ maxHeight: 240, overflow: "auto" }}>
+                {products.map((product) => (
+                  <CartProduct key={product.id} {...product} />
+                ))}
+              </Paper>
+              {/* <Paper>
+                  <Typography>{props.voucher_used}</Typography>
+                </Paper> */}
               <Typography
                 sx={{
                   background: "orange",
@@ -99,7 +116,7 @@ const CardOrder = ({ props, amount }) => {
                 color="white"
                 p={1}
               >
-                {currentFormat(amount)}
+                {currentFormat(amount)} <i>{discount === 0 ? "" : discount}</i>
               </Typography>
               <Typography
                 sx={{
