@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import SearchCard from "../../../common/searchCard";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -47,12 +48,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+export default function SearchAppBar({ products }) {
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchResult, setSearchResult] = React.useState([]);
+
+  React.useEffect(() => {
+    setSearchResult(
+      searchQuery !== ""
+        ? products.filter((p) =>
+            p.name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+        : []
+    );
+  }, [searchQuery, products]);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Search>
+          <Search onChange={handleSearch}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -60,6 +77,19 @@ export default function SearchAppBar() {
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
+
+            <Box
+              position={"absolute"}
+              sx={{
+                height: "240px",
+                overflow: "auto",
+              }}
+            >
+              {searchResult !== [] &&
+                searchResult.map((product) => (
+                  <SearchCard product={product} key={product._id} />
+                ))}
+            </Box>
           </Search>
         </Toolbar>
       </AppBar>

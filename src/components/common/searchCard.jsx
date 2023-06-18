@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setProductDetails } from "../../redux/reducers/productReducer";
 
 const SearchCard = ({ product }) => {
+  console.log(product);
   const dispatch = useDispatch();
 
   const handleViewProductDetails = () => {

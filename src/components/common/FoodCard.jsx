@@ -8,6 +8,7 @@ import {
   IconButton,
   Modal,
   Typography,
+  capitalize,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -138,7 +139,12 @@ const FoodCard = ({ props }) => {
                 pt: 1,
               }}
             >
-              <Typography variant="body1" fontSize={20} fontWeight={600}>
+              <Typography
+                variant="body1"
+                textTransform={"capitalize"}
+                fontSize={20}
+                fontWeight={600}
+              >
                 {props.name}
               </Typography>
               {/* <Typography variant="body2" pt={1} pb={1}>
@@ -149,7 +155,8 @@ const FoodCard = ({ props }) => {
                 mt="auto"
                 fontWeight={500}
                 color="orange"
-                sx={{ textDecoration: "line-through" }}
+                sx={{ textDecoration: "line-through", pl: 2 }}
+                align="left"
               >
                 {props.discount !== 0 && currentFormat(props.price)}
               </Typography>

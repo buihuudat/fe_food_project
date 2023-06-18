@@ -1,24 +1,24 @@
-import { LoadingButton } from "@mui/lab";
 import {
-  Avatar,
-  Button,
+  Box,
   Container,
-  Paper,
-  TextField,
-  Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import React from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import userApi from "../../../../api/userApi";
 import Toast from "../../../common/Toast";
+import CardFeedback from "./cardFeedback";
 
 const Feedback = () => {
   const [hidden, setHidden] = useState(true);
   const [loading, setLoading] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const feedbacks = useSelector((state) => state.user.allFeedback);
+  const [active, setactive] = useState(0);
 
   const handleSubmit = async (e) => {
     const data = {
@@ -40,86 +40,44 @@ const Feedback = () => {
     }
   };
 
+  const handleChange = (e) => {
+    setactive(e.target.value);
+  };
+
   return (
-    <Container maxWidth="sm" sx={{ mt: 5 }}>
-      {feedbacks?.map((feedback, index) => {
-        if (!feedback.resolve) {
-          return (
-            <Paper
-              key={index}
-              sx={{
-                p: 3,
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-                gap: 3,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  width: "100%",
-                  gap: 3,
-                }}
-              >
-                <Avatar alt="user" src="" sx={{ width: 60, height: 60 }} />
-                <Box>
-                  <Typography fontWeight={600} variant="h5">
-                    {feedback.title}
-                  </Typography>
-                  <Typography>{feedback.content}</Typography>
-                </Box>
-                {hidden && (
-                  <Button sx={{ ml: "auto" }} onClick={() => setHidden(false)}>
-                    Reply
-                  </Button>
-                )}
-              </Box>
-              {!hidden && (
-                <Box
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <TextField
-                    label="Reply"
-                    fullWidth
-                    onChange={(e) => setReplyContent(e.target.value)}
-                  />
-                  <Box
-                    mt={3}
-                    sx={{ display: "flex", flexDirection: "row", gap: 5 }}
-                  >
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      color="warning"
-                      onClick={() => {
-                        setHidden(true);
-                        setLoading(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <LoadingButton
-                      loading={loading}
-                      fullWidth
-                      variant="outlined"
-                      color="success"
-                      type="submit"
-                      onClick={() => handleSubmit(feedback)}
-                    >
-                      Send
-                    </LoadingButton>
-                  </Box>
-                </Box>
-              )}
-            </Paper>
-          );
-        }
-      })}
-    </Container>
+    <Box>
+      <FormControl fullWidth sx={{ mt: 2 }}>
+        <InputLabel id="demo-simple-select-label">Resolve</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={active}
+          label="Resolve"
+          onChange={handleChange}
+        >
+          <MenuItem value={1}>Yes</MenuItem>
+          <MenuItem value={0}>No</MenuItem>
+        </Select>
+      </FormControl>
+      <Container maxWidth="sm" sx={{ mt: 5 }}>
+        {feedbacks?.map((feedback) => {
+          if (active && feedback.resolve) {
+            return (
+              <CardFeedback
+                key={feedback._id}
+                feedback={feedback}
+                handleSubmit={handleSubmit}
+                hidden={hidden}
+                setHidden={setHidden}
+                setReplyContent={setReplyContent}
+                loading={loading}
+                setLoading={setLoading}
+              />
+            );
+          }
+        })}
+      </Container>
+    </Box>
   );
 };
 

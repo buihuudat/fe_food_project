@@ -25,7 +25,6 @@ import userApi from "../../../api/userApi";
 import { setUser } from "../../../redux/reducers/userReducer";
 import Toast from "../../common/Toast";
 import authUtils from "../../../utils/authUtils";
-import _ from "lodash";
 import imageUpload from "../../../handler/ImageUpload";
 
 const Profile = () => {

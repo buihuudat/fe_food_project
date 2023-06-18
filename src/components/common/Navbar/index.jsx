@@ -33,9 +33,9 @@ import {
 } from "../../../redux/reducers/modalReducer";
 import { setLogin } from "../../../redux/reducers/handlerReducer";
 import Profile from "./Profile";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 const drawerWidth = 240;
 
 export default function Navbar() {
@@ -90,10 +90,10 @@ export default function Navbar() {
 
   const otherHeaders = [
     {
-      icon: <NotificationsNoneOutlinedIcon />,
-      text: "Thông báo",
+      icon: <AttachMoneyIcon />,
+      text: "Quản lý chi tiêu",
       display: true,
-      handler: () => dispatch(setNotificationModal(true)),
+      linkURL: "https://spending-app.vercel.app/",
       noti: 0,
     },
     // {
@@ -161,7 +161,7 @@ export default function Navbar() {
         <List>
           {headers.map((data, index) => (
             <ListItem key={index}>
-              <ListItemButton to={data.path}>
+              <ListItemButton component={NavLink} to={data.path}>
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText>{data.text}</ListItemText>
                 {login && data.noti !== 0 && (
@@ -182,6 +182,7 @@ export default function Navbar() {
           {otherHeaders.map((data, index) => (
             <ListItem key={index}>
               <ListItemButton
+                href={data?.linkURL}
                 onClick={
                   login ? data.handler : () => dispatch(setSigninModal(true))
                 }

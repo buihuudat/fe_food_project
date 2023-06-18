@@ -107,6 +107,7 @@ const AddToggle = () => {
 const Products = () => {
   const [type, setType] = useState("all");
   const [option, setOption] = useState(0);
+  const [searchQuery, setSearchQuery] = useState(null);
   const products = useSelector((state) => state.products.data);
 
   const dataFilter = (type) => {
@@ -130,6 +131,8 @@ const Products = () => {
     setDataProduct(dataFilter(type));
   }, [products, option]);
 
+  useEffect(() => {}, [searchQuery, dataProduct]);
+
   const handleClick = (e) => {
     const type = menu[e].type;
     setDataProduct(dataFilter(type));
@@ -139,7 +142,7 @@ const Products = () => {
 
   return (
     <Box>
-      <SearchAppBar />
+      <SearchAppBar products={products} />
       <Box sx={{ p: 3 }}>
         <Box
           sx={{

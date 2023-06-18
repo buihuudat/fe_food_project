@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import CardOrder from "./CardOrder";
-import * as _ from "lodash";
 import userOrderApi from "../../../../api/userOrderApi";
 
 const Bill = () => {

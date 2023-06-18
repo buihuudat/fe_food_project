@@ -17,11 +17,10 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DiscountIcon from "@mui/icons-material/Discount";
-import MessageIcon from "@mui/icons-material/Message";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 
 import { useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Chip, ListItemSecondaryAction } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -77,12 +76,12 @@ export default function SideBar() {
       path: "/admin/users",
       noti: users.length,
     },
-    {
-      icon: <MessageIcon />,
-      text: "Messages",
-      path: "/admin/message",
-      noti: users.length,
-    },
+    // {
+    //   icon: <MessageIcon />,
+    //   text: "Messages",
+    //   path: "/admin/message",
+    //   noti: users.length,
+    // },
     {
       icon: <FeedbackIcon />,
       text: "Feedbacks",
@@ -135,7 +134,7 @@ export default function SideBar() {
                   : {}
               }
             >
-              <ListItemButton to={data.path}>
+              <ListItemButton component={NavLink} to={data.path}>
                 <ListItemIcon>{data.icon}</ListItemIcon>
                 <ListItemText primary={data.text} />
                 {data.noti !== 0 && (
