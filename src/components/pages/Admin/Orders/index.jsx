@@ -12,6 +12,7 @@ import CardOrder from "./CardOrder";
 import userOrderApi from "../../../../api/userOrderApi";
 
 const Bill = () => {
+  document.title = "Orders | Administrator";
   const [statusProduct, setStatusProduct] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
@@ -31,8 +32,6 @@ const Bill = () => {
   const extractedData = () => {
     let pr2 = [];
     orders.map((item) => {
-      console.log(item);
-
       const _id = item._id;
       const UID = item.user;
 

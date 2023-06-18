@@ -21,6 +21,8 @@ const Feedback = () => {
   const [active, setactive] = useState(0);
 
   const handleSubmit = async (e) => {
+    document.title = "Feedback | Administrator";
+
     const data = {
       content: replyContent,
       user: e.user,

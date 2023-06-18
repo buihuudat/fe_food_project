@@ -97,7 +97,6 @@ const UpdateModal = () => {
             setConfirmPasswordErrText(e.msg);
             break;
           default:
-            console.log(e);
             break;
         }
       });

@@ -68,6 +68,8 @@ const Information = () => (
 );
 
 const Admin = () => {
+  document.title = "Administrator";
+
   const usersRedux = useSelector((state) => state.user.allUser);
   const productsRedux = useSelector((state) => state.products.data);
   const orderRedux = useSelector((state) => state.userOrder.getAll);

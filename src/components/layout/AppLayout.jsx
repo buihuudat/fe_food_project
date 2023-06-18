@@ -35,7 +35,7 @@ const AppLayout = () => {
       const products = await productApi.getAll();
       dispatch(setProducts(products));
       if (!auth) {
-        if (path === "profile") {
+        if (path === "profile" || path === "bought" || path === "bills") {
           dispatch(setSigninModal(true));
         }
         dispatch(setLoading(false));

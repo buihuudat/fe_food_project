@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import DeleteModal from "./deleteModal";
 
 const Vouchers = () => {
+  document.title = "Voucher | Administrator";
+
   const voucherData = useSelector((state) => state.voucher.data);
   const deleteVoucher = useSelector((state) => state.modal.deleteVoucher);
   const dispatch = useDispatch();
