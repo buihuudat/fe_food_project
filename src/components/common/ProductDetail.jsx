@@ -1,19 +1,20 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setProductDetails,
-  setProducts,
-} from "../../redux/reducers/productReducer";
-import currentFormat from "../../handler/currentFormat";
 import StarIcon from "@mui/icons-material/Star";
 import { IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+
+import {
+  setProductDetails,
+  setProducts,
+} from "../../redux/reducers/productReducer";
 import { setCart } from "../../redux/reducers/cartReducer";
-import { useLocation } from "react-router-dom";
+import currentFormat from "../../utils/handler/currentFormat";
 
 const style = {
   position: "absolute",

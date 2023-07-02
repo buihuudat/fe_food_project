@@ -1,24 +1,23 @@
 import { Box, LinearProgress } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import authUtils from "../../utils/authUtils";
-import SideBar from "../pages/Admin/Sidebar";
-import { setProducts } from "../../redux/reducers/productReducer";
-import productApi from "../../api/productApi";
 import { useDispatch } from "react-redux";
+
+import authUtils from "../../utils/authUtils";
+import SideBar from "../AdminSidebar";
+import { setProducts } from "../../redux/reducers/productReducer";
+import productApi from "../../utils/api/productApi";
 import {
   setAllFeedback,
   setAllUser,
   setUser,
 } from "../../redux/reducers/userReducer";
 import { setVoucher } from "../../redux/reducers/voucherReducer";
-
-import userApi from "../../api/userApi";
-import voucherApi from "../../api/voucherApi";
-import userOrderApi from "../../api/userOrderApi";
+import userApi from "../../utils/api/userApi";
+import voucherApi from "../../utils/api/voucherApi";
+import userOrderApi from "../../utils/api/userOrderApi";
 import { setAllOrder } from "../../redux/reducers/orderReducer";
-import ProductDetail from "../common/ProductDetail";
+import ProductDetail from "../../components/common/ProductDetail";
 
 const AdminLayout = () => {
   const [loading, setLoading] = useState(false);
@@ -57,7 +56,9 @@ const AdminLayout = () => {
     <Box sx={{ display: "flex" }}>
       <SideBar />
       <Box sx={{ flexGrow: 1 }}>
-        <Outlet />
+        <Suspense fallback={<LinearProgress color="warning" />}>
+          <Outlet />
+        </Suspense>
         <ProductDetail />
       </Box>
     </Box>

@@ -1,25 +1,24 @@
-import { Box, CircularProgress } from "@mui/material";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { Box, CircularProgress, LinearProgress } from "@mui/material";
+import { useState, useEffect, Suspense } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import productApi from "../../api/productApi";
-import userOrderApi from "../../api/userOrderApi";
+
+import productApi from "../../utils/api/productApi";
+import userOrderApi from "../../utils/api/userOrderApi";
 import { setLoading, setLogin } from "../../redux/reducers/handlerReducer";
 import { setSigninModal } from "../../redux/reducers/modalReducer";
 import { setOrder } from "../../redux/reducers/orderReducer";
 import { setProducts } from "../../redux/reducers/productReducer";
 import { setUser } from "../../redux/reducers/userReducer";
 import authUtils from "../../utils/authUtils";
-import Loading from "../common/Loading";
-import Navbar from "../common/Navbar";
-import Signin from "../pages/Auth/Signin";
-import Signup from "../pages/Auth/Signup";
-import Notification from "../pages/Notification";
-import Message from "../pages/Message";
-import Support from "../pages/Support";
-import ProductDetail from "../common/ProductDetail";
+import Loading from "../../components/common/Loading";
+import Navbar from "../Navbar";
+import Signin from "../../pages/Auth/Signin";
+import Signup from "../../pages/Auth/Signup";
+import Notification from "../../pages/Notification";
+import Message from "../../pages/Message";
+import Support from "../../pages/Support";
+import ProductDetail from "../../components/common/ProductDetail";
 
 const AppLayout = () => {
   const [loadingState, setLoadingState] = useState(false);
@@ -61,7 +60,9 @@ const AppLayout = () => {
       <Box sx={{ flexGrow: 1 }}>
         <Loading />
         {loadingState ? (
-          <Outlet />
+          <Suspense fallback={<LinearProgress color="warning" />}>
+            <Outlet />
+          </Suspense>
         ) : (
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <CircularProgress />
